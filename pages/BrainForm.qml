@@ -6,8 +6,18 @@ Image {
 
     property string sourceImg
     property bool checkboxVisible: false
-    property alias imgChecked: checkbox.checked
+
     readonly property string plusImgSource: "qrc:/images/plus.png"
+
+    property alias info: info
+    property alias mouseArea: mouseArea
+    property alias checkbox: checkbox
+    property alias imgChecked: checkbox.checked
+    property alias menu: menu
+    property alias changeMenu: changeMenu
+    property alias deleteMenu: deleteMenu
+    property alias brainImage: brainImage
+    property alias fileDialog: fileDialog
 
     id: brainImage
     source: sourceImg
@@ -19,34 +29,6 @@ Image {
         id: fileDialog
         nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
         folder: shortcuts.documents
-        onAccepted: {
-            var path = fileDialog.fileUrl
-            if (fileDialog.checkIfImage(path.toString())) {
-                fileDialog.addImage(path)
-            } else {
-                console.log("Chosen file is not an image.")
-                info.open()
-            }
-        }
-        onRejected: {
-            console.log("Choosing file canceled.")
-        }
-        function checkIfImage(source) {
-            var fileExtension = source.substring(source.length-4,source.length).toLowerCase()
-            return ( (fileExtension === (".jpg")) || (fileExtension === ".png") )
-        }
-        function addImage(source) {
-            //add new empty plus image when you add new image
-            //                if (brainImage.source == plusImgSource) {
-            //                    var component = Qt.createComponent("qrc:/pages/BrainTemplate.qml");
-            //                    var elec = component.createObject(parent.parent, {sourceImg: plusImgSource});
-            //                }
-            brainImage.source = source
-            sourceImg = source
-            checkbox.visible = true
-            checkbox.checked = false
-            console.log("You chose: " + source)
-        }
     }
 
     Popup {
@@ -61,12 +43,11 @@ Image {
             Label { text: qsTr("Please choose a image file (*.jpg, *.png)") }
             Button {
                 text: qsTr("OK")
-                onClicked: {
-                    info.close()
-                }
+                onClicked: { info.close() }
             }
         }
     }
+
     CheckBox {
         id: checkbox
         visible: checkboxVisible
@@ -89,39 +70,24 @@ Image {
                 visible: checkbox.checked
             }
         }
-
-        onCheckStateChanged: {
-            brainImage.opacity = checkbox.checked ? 0.5 : 1
-        }
     }
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        onClicked: {
-            if (brainImage.source == plusImgSource) {
-                fileDialog.open()
-            } else {
-                checkbox.checked = !checkbox.checked
-            }
-        }
-        onPressAndHold: menu.open()
+
         Menu {
             id: menu
             x: mouseArea.mouseX
             y: mouseArea.mouseY
 
             MenuItem {
+                id: changeMenu
                 text: qsTr("Change")
-                onClicked: fileDialog.open()
             }
             MenuItem {
+                id: deleteMenu
                 text: qsTr("Delete")
-                onClicked: {
-                    brainImage.source = plusImgSource;
-                    checkbox.visible = false
-                    checkbox.checked = false
-                    console.log("Image has been deleted.")
-                }
             }
         }
     }

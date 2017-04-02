@@ -8,13 +8,9 @@ Item {
     property int size: 20
     property bool droppingEnabled: false
     property string color: "white"
-    property ListModel links: ListModel {
-        //        ListElement {electrodeNumber: 1; wave: "C3"}
-        //        ListElement {electrodeNumber: 3; wave: "C4"}
-        //        ListElement {electrodeNumber: 4; wave: "F3"}
-    }
-    width: columnCount*size; height: rowCount*size;
+    property ListModel links: ListModel { }
 
+    width: columnCount*size; height: rowCount*size;
 
     Rectangle {
         id: electrode

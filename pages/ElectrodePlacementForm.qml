@@ -29,7 +29,7 @@ Controls.SplitView {
         id: imageArea
         width: 3/4*parent.width
         height: parent.height
-        Layout.minimumWidth: 100
+        Layout.minimumWidth: 3/4*parent.width
 
         Rectangle {
             anchors.fill: parent
@@ -69,14 +69,14 @@ Controls.SplitView {
 
     Flickable {
         Layout.minimumWidth: 100
-        contentHeight: rect.height
-        contentWidth: rect.width
+        contentHeight: column.height
+        contentWidth: column.width
         boundsBehavior: Flickable.OvershootBounds
 
         Rectangle {
             id: rect
-            width: column.width
-            height: column.height
+            width: 1/4*electrodePlacement.width
+            height: electrodePlacement.height
             Layout.minimumWidth: 100
             color: "white"
             Column {
@@ -140,16 +140,20 @@ Controls.SplitView {
                             }
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
-                                electrodes.insert(index + 1, { columns: columns, rows: rows, links: links})
+                                if(electrode.basicE.x !== 0 & electrode.basicE.y !== 0) {
+                                    var component = Qt.createComponent("qrc:/pages/Electrode.qml")
+                                    var sameElec = component.createObject(electrode, {"columnCount": columns, "rowCount": rows, "linkList": links, "color": electrode.basicE.color});
+                                    console.log("New view on electrode added.")
+                                }
                             }
+
                         }
                         Electrode {
                             id: electrode
                             columnCount: columns
                             rowCount: rows
                             indexNumber: index
-                            linksList: links
-                            //                draggable: true
+                            linkList: links
                         }
                     }
                 }
@@ -161,4 +165,4 @@ Controls.SplitView {
     }
 
     onCurrIndexChanged: { electrodeRep.itemAt(currIndex).z = ++zHighest }
- }
+}

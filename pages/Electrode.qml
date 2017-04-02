@@ -7,14 +7,22 @@ Item {
     property int columnCount
     property int rowCount
     property int size: 20
+    property alias color: electrode.color
     property int indexNumber
     property bool draggable: true
     property bool flickable: true
     property alias basicE: electrode
     property alias mouseArea: mouseArea
-    property ListModel linksList
+    property ListModel linkList
     width: columnCount*size; height: rowCount*size;
-    Rectangle {id: sourceBorder; anchors.fill: parent; border.color: "black"; radius: size/2 }
+    Rectangle {
+        id: sourceBorder;
+        anchors.fill: parent;
+        border.color: "black";
+        radius: size/2
+
+    }
+    onColorChanged: sourceBorder.border.color = (color === "white") ? "black" : color
 
     Flickable {
         id: flick
@@ -26,7 +34,7 @@ Item {
             rowCount: root.rowCount
             size: root.size
             droppingEnabled: false
-            links: linksList
+            links: linkList
 
             Behavior on scale { NumberAnimation { duration: 200 } }
             Behavior on x { NumberAnimation { duration: 200 } }

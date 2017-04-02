@@ -21,7 +21,7 @@ SplitView {
         Item {
             id: destItem
             width: destination.width * 1.1
-            height: destination.height * 1.1
+            height: destination.height * 1.2
 
             Column {
                 id: destination
@@ -95,6 +95,4 @@ SplitView {
         }
         ScrollIndicator.vertical: ScrollIndicator { }
     }
-
-
 }

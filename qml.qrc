@@ -34,5 +34,6 @@
         <file>xmls/sample.gdf.mont</file>
         <file>main.cpp</file>
         <file>main.h</file>
+        <file>pages/DragTrackForm.qml</file>
     </qresource>
 </RCC>
