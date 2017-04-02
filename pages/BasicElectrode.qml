@@ -35,9 +35,9 @@ Item {
                             readonly property int defaultName: columnCount * ( rowCount - row.getIndex() ) + ( modelData + 1 )
                             property alias name: electrodeText.text
                             property string trackName: ""
-                            property int index
                             property bool alreadyContainsDrag: false
                             property var signalData
+                            property bool nameToChange: true
 
                             width: size; height: size
                             enabled: droppingEnabled
@@ -74,16 +74,23 @@ Item {
                             }
 
                             onTrackNameChanged: {
-                                if (trackName === "") {
-                                    links.remove(index - 1)
-                                } else {
-                                    links.append( { electrodeNumber: defaultName, wave: name})
-                                    index = links.count
+                                if (nameToChange) {
+                                    if (trackName === "") {
+                                        for (var i = 0; i < links.count; i++) {
+                                            if (links.get(i).electrodeNumber === defaultName) {
+                                                links.remove(i)
+                                                break
+                                            }
+                                        }
+                                    } else {
+                                        links.append( { electrodeNumber: defaultName, wave: name})
+                                    }
                                 }
                             }
 
                             Component.onCompleted: {
                                 if (links !== null) {
+                                    nameToChange = false
                                     for (var i = 0; i < links.count; i++) {
                                         if (links.get(i).electrodeNumber === defaultName) {
                                             name = links.get(i).wave
@@ -92,6 +99,7 @@ Item {
                                         }
                                     }
                                 }
+                                nameToChange = true
                             }
                         }
                     }

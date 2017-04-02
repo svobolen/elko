@@ -179,32 +179,32 @@ ApplicationWindow {
         }
     }
 
-    FileDialog {
-        id: saveDialog
-        folder: shortcuts.documents
-        selectExisting: false
-        nameFilters: [ "All files (*)" ]
-        onAccepted: {
+//    FileDialog {
+//        id: saveDialog
+//        folder: shortcuts.documents
+//        selectExisting: false
+//        nameFilters: [ "All files (*)" ]
+//        onAccepted: {
 
-        }
-        onRejected: console.log("Saving file canceled.")
-    }
+//        }
+//        onRejected: console.log("Saving file canceled.")
+//    }
 
-    FileDialog {
-        id: openDialog
-        nameFilters: [ "", "All files (*)" ]
-        folder: shortcuts.documents
-        onAccepted: {
-            //            var path = fileDialog.fileUrl
-            //            if (fileDialog.checkIfImage(path.toString())) {
-            //                fileDialog.addImage(path)
-            //            } else {
-            //                console.log("Chosen file is not an image.")
-            //                info.open()
-            //            }
-        }
-        onRejected: console.log("Choosing file canceled.")
-    }
+//    FileDialog {
+//        id: openDialog
+//        nameFilters: [ "", "All files (*)" ]
+//        folder: shortcuts.documents
+//        onAccepted: {
+//            //            var path = fileDialog.fileUrl
+//            //            if (fileDialog.checkIfImage(path.toString())) {
+//            //                fileDialog.addImage(path)
+//            //            } else {
+//            //                console.log("Chosen file is not an image.")
+//            //                info.open()
+//            //            }
+//        }
+//        onRejected: console.log("Choosing file canceled.")
+//    }
 
     function changePage(title, source, index) {
         if (listView.currentIndex !== index) {

@@ -14,7 +14,7 @@ Controls.SplitView {
     property alias comboBox: comboBox
     property alias exportButton: exportButton
     property alias electrodeRep: electrodeRep
-    property alias fileDialog: fileDialog
+    //property alias fileDialog: fileDialog
     property alias electrodePlacement: electrodePlacement
 
     property var name
@@ -107,12 +107,12 @@ Controls.SplitView {
                 Button {
                     id: exportButton
                     text: qsTr("Export image")
-                    FileDialog {
-                        id: fileDialog
-                        folder: shortcuts.documents
-                        selectExisting: false
-                        nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
-                    }
+//                    FileDialog {
+//                        id: fileDialog
+//                        folder: shortcuts.documents
+//                        selectExisting: false
+//                        nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+//                    }
                 }
                 Repeater {
                     id: electrodeRep
