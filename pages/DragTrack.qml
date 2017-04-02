@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     id: root
     property int size: 20
-    property string waveName: "X"
+    property string trackName: "X"
     property var signalData
     width: size; height: size
 
@@ -17,15 +17,15 @@ Item {
             parent = (tile.Drag.target === null || tile.Drag.target.alreadyContainsDrag) ?  root : tile.Drag.target
             if (tile.Drag.target !== null) {
                 tile.Drag.target.alreadyContainsDrag = true
-                tile.Drag.target.name = waveName
-                tile.Drag.target.waveName = waveName
+                tile.Drag.target.name = trackName
+                tile.Drag.target.trackName = trackName
             }
         }
         onPressed: {
             if (parent !== root) {
                 parent.alreadyContainsDrag = false
                 parent.name = parent.defaultName
-                parent.waveName = ""
+                parent.trackName = ""
             }
         }
 
@@ -42,7 +42,7 @@ Item {
             Drag.hotSpot.y: height/2
 
             Text {
-                text: waveName
+                text: trackName
                 anchors.fill: parent
                 horizontalAlignment:Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

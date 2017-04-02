@@ -1,29 +1,17 @@
 import QtQuick 2.7
+import QtQuick.Controls 2.0
+
 
 ImageManagerForm {
 
-    a.addButton.onClicked: {
-        swipe.addItem()
-        swipe.currentIndex++
-        console.log("Page " + swipe.currentIndex + " was added to swipe. (Counting from zero.)")
-    }
-
-    a.deleteButton.onClicked: {
-        if(swipe.count !== 2) {
-            console.log("Page " + swipe.currentIndex + " was removed from swipe. (Counting from zero.)")
-            swipe.removeItem(swipe.currentIndex)
-        } else {
-            console.log("There have to be at least 2 pages in swipe.")
-        }
-    }
-    a.confirmButton.onClicked: {
+    confirmButton.onClicked: {
         var checkedImages = getCheckedImages()
         console.log("User chose " + checkedImages.length + " image(s): " + checkedImages.toString())
         window.images = checkedImages
-        window.changePage("Electrode Manager", "qrc:/pages/ElectrodeManager.qml", 2)
+        window.changePage("Electrode Manager", "qrc:/pages/ElectrodeManager.qml", 1)
     }
 
-    a.resetButton.onClicked: { resetChoice() }
+    resetButton.onClicked: resetChoice()
 
     function resetChoice() {
         for (var k = 0; k < swipe.count; k++) {
@@ -43,16 +31,5 @@ ImageManagerForm {
             }
         }
         return sourceArray
-    }
-
-    Connections {
-        target: swipe
-        onCurrentIndexChanged: console.log(swipe.count)
-    }
-
-
-    Loader {
-        id: loader
-
     }
 }

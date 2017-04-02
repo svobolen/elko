@@ -11,6 +11,7 @@ Item {
     property bool draggable: true
     property bool flickable: true
     property alias basicE: electrode
+    property alias mouseArea: mouseArea
     property ListModel linksList
     width: columnCount*size; height: rowCount*size;
     Rectangle {id: sourceBorder; anchors.fill: parent; border.color: "black"; radius: size/2 }
@@ -64,9 +65,7 @@ Item {
                     scrollGestureEnabled: false  // 2-finger-flick gesture should pass through to the Flickable
                     property var previousParent: root
                     onPressAndHold: menu.open()
-                    onPressed: {
-                        previousParent = electrode.parent
-                        electrodePlacement.currListIndex = root.indexNumber }
+                    onPressed: { electrodePlacement.currIndex = root.indexNumber }
                     onWheel: {
                         if (draggable) {
                             if (wheel.modifiers & Qt.ControlModifier) {
@@ -84,22 +83,22 @@ Item {
                     }
                     onReleased: {
 
-                        electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
-                        console.log("po " + electrode.parent)
+//                        electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
+//                        console.log("po " + electrode.parent)
 
-                        if(previousParent === root && electrode.parent !== root) {
-                            console.log("tady")
-                            electrode.x = electrode.x + electrode.parent.width
-                            electrode.y = electrode.y + root.y + 250
-                        } else if (electrode.parent === root){
-                            electrode.rotation = 0
-                            electrode.scale = 1
-                            electrode.x = 0
-                            electrode.y = 0
-                        }
-                        console.log(electrode.parent)
-                        console.log(electrode.x)
-                        console.log(electrode.y)
+//                        if(previousParent === root && electrode.parent !== root) {
+//                            console.log("tady")
+//                            electrode.x = electrode.x + electrode.parent.width
+//                            electrode.y = electrode.y + root.y + 250
+//                        } else if (electrode.parent === root){
+//                            electrode.rotation = 0
+//                            electrode.scale = 1
+//                            electrode.x = 0
+//                            electrode.y = 0
+//                        }
+//                        console.log(electrode.parent)
+//                        console.log(electrode.x)
+//                        console.log(electrode.y)
                     }
                     Menu {
                         id: menu

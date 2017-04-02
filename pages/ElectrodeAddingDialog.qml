@@ -1,13 +1,11 @@
-import QtQuick 2.4
+import QtQuick 2.7
 
 ElectrodeAddingDialogForm {
-    okB.onClicked: {
+    okButton.onClicked: {
         addElectrode(columnSpinBox.value, rowSpinBox.value)
         addDialog.close()
     }
-    cancelB.onClicked: addDialog.close()
-
-
+    cancelButton.onClicked: addDialog.close()
 
     function addElectrode(columnCount, rowCount) {
 
@@ -18,11 +16,11 @@ ElectrodeAddingDialogForm {
         }
         if (rowCount === 1) {
             //create strip
-            stripM.append({ columns: columnCount })
+            stripModel.append({ columns: columnCount })
             tabBar.currentIndex = 0
         } else {
             //create grid
-            gridM.append({ columns: columnCount, rows: rowCount })
+            gridModel.append({ columns: columnCount, rows: rowCount })
             tabBar.currentIndex = 1
         }
         console.log("New electrode " + rowCount + "x" + columnCount + " was added.")

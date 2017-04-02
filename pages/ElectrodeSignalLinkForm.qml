@@ -86,7 +86,7 @@ SplitView {
                         model: xmlModels.trackModel
                         DragTrack {
                             size: 40
-                            waveName: label.replace(/\s+/g, '') //without whitespaces
+                            trackName: label.replace(/\s+/g, '') //without whitespaces
                         }
                     }
                 }

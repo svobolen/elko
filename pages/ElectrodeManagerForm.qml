@@ -5,15 +5,15 @@ import QtQuick.Controls 2.0
 Page {
     id: item
     property var name
-    property alias confirmB: confirmButton
-    property alias resetB: resetButton
-    property alias addB: addButton
-    property alias stripR: stripRep
-    property alias gridR: gridRep
-    property alias stripT: stripTab
-    property alias gridT: gridTab
-    property alias stripM: stripModel
-    property alias gridM: gridModel
+    property alias confirmButton: confirmButton
+    property alias resetButton: resetButton
+    property alias addButton: addButton
+    property alias stripRepeater: stripRep
+    property alias gridRepeater: gridRep
+    property alias stripTable: stripTab
+    property alias gridTable: gridTab
+    property alias stripModel: stripModel
+    property alias gridModel: gridModel
     property alias tabBar: bar
 
     footer: TabBar {

@@ -5,12 +5,12 @@ ElectrodeSignalLinkForm {
 
     confirmButton.onClicked: {
         fillLinkedElectrodesList()
-        listView.currentIndex = 4   //index v listview
+        listView.currentIndex = 3   //index v listview
         titleLabel.text = "Electrode Placement"
         stackView.push( "qrc:/pages/ElectrodePlacement.qml", {"electrodes": linkedElectrodesList, "images": window.images,"name": "Electrode Placement"} )
     }
 
-    ListModel { id: linkedElectrodesList } //ListElement { electrode: basicElectrode}
+    ListModel { id: linkedElectrodesList } //ListElement { rows: rowCount, columns: columnCount, links: links}
 
     function fillLinkedElectrodesList() {
         linkedElectrodesList.clear()

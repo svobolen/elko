@@ -7,7 +7,7 @@ Item {
     property int rowCount
     property int size: 20
     property bool droppingEnabled: false
-    property var color: "white"
+    property string color: "white"
     property ListModel links: ListModel {
         //        ListElement {electrodeNumber: 1; wave: "C3"}
         //        ListElement {electrodeNumber: 3; wave: "C4"}
@@ -38,7 +38,7 @@ Item {
                             id: dropArea
                             readonly property int defaultName: columnCount * ( rowCount - row.getIndex() ) + ( modelData + 1 )
                             property alias name: electrodeText.text
-                            property string waveName: ""
+                            property string trackName: ""
                             property int index
                             property bool alreadyContainsDrag: false
                             property var signalData
@@ -77,8 +77,8 @@ Item {
                                 }
                             }
 
-                            onWaveNameChanged: {
-                                if (waveName === "") {
+                            onTrackNameChanged: {
+                                if (trackName === "") {
                                     links.remove(index - 1)
                                 } else {
                                     links.append( { electrodeNumber: defaultName, wave: name})
@@ -91,7 +91,7 @@ Item {
                                     for (var i = 0; i < links.count; i++) {
                                         if (links.get(i).electrodeNumber === defaultName) {
                                             name = links.get(i).wave
-                                            waveName = links.get(i).wave
+                                            trackName = links.get(i).wave
                                             electrodeText.font.bold = true
                                         }
                                     }
@@ -115,20 +115,20 @@ Item {
         }
     }
 
-    function changeNames(a) {
+    function changeNames(comboBoxValue) {
         for (var k = 0; k < rowCount; k++) {
             for (var l = 0; l < columnCount; l++) {
-                switch (a) {
+                switch (comboBoxValue) {
                 case 0: // only default name
                     rowRep.itemAt(k).colRep.itemAt(l).name = rowRep.itemAt(k).colRep.itemAt(l).defaultName;
                     break;
                 case 1: // only wave names (non-linked are empty)
-                    rowRep.itemAt(k).colRep.itemAt(l).name = rowRep.itemAt(k).colRep.itemAt(l).waveName
+                    rowRep.itemAt(k).colRep.itemAt(l).name = rowRep.itemAt(k).colRep.itemAt(l).trackName
                     break;
                 default: // wave names, non-linked default name
                     rowRep.itemAt(k).colRep.itemAt(l).name =
-                            (rowRep.itemAt(k).colRep.itemAt(l).waveName === "") ?
-                                rowRep.itemAt(k).colRep.itemAt(l).defaultName : rowRep.itemAt(k).colRep.itemAt(l).waveName
+                            (rowRep.itemAt(k).colRep.itemAt(l).trackName === "") ?
+                                rowRep.itemAt(k).colRep.itemAt(l).defaultName : rowRep.itemAt(k).colRep.itemAt(l).trackName
                     break;
                 }
             }

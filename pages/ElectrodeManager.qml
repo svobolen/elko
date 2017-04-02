@@ -3,27 +3,31 @@ import QtQuick.Controls 2.0
 
 ElectrodeManagerForm {
 
-    confirmB.onClicked: {
+    confirmButton.onClicked: {
         var chosenElecs = getChosenElectrodes()
         if (chosenElecs.count === 0) {
             console.log("User did not choose any electrode.")
         } else {
-            listView.currentIndex = 3   //index v listview
+            listView.currentIndex = 2   //index v listview
             titleLabel.text = "Link Signal with Electrode"
             stackView.push( "qrc:/pages/ElectrodeSignalLink.qml", {"electrodes": chosenElecs, "name": "Link Signal with Electrode"} )
         }
     }
-    addB.onClicked: addDialog.open()
-    resetB.onClicked: resetChoice()
+    addButton.onClicked: {
+        addDialog.open()
+    }
+    resetButton.onClicked: {
+        resetChoice()
+    }
 
     function resetChoice() {
         // reset strips choice
-        for (var i = 0; i < stripR.count; i++) {
-            stripR.itemAt(i).count = 0
+        for (var i = 0; i < stripRepeater.count; i++) {
+            stripRepeater.itemAt(i).count = 0
         }
         //reset grids choice
-        for (var j = 0; j < gridR.count; j++) {
-            gridR.itemAt(j).count = 0
+        for (var j = 0; j < gridRepeater.count; j++) {
+            gridRepeater.itemAt(j).count = 0
         }
     }
 
@@ -31,20 +35,20 @@ ElectrodeManagerForm {
         console.log("User chose following electrodes: ")
         chosenElectrodesList.clear()
 
-        for (var i = 0; i < stripR.count; i++) {
-            if (stripR.itemAt(i).count !== 0) {
-                for (var k = 0; k < stripR.itemAt(i).count; k++) {
-                    chosenElectrodesList.append({ columns: stripR.itemAt(i).stripColumns, rows: 1 })
+        for (var i = 0; i < stripRepeater.count; i++) {
+            if (stripRepeater.itemAt(i).count !== 0) {
+                for (var k = 0; k < stripRepeater.itemAt(i).count; k++) {
+                    chosenElectrodesList.append({ columns: stripRepeater.itemAt(i).stripColumns, rows: 1 })
                 }
-                console.log(stripR.itemAt(i).count + "x strip 1x" + stripR.itemAt(i).stripColumns)
+                console.log(stripRepeater.itemAt(i).count + "x strip 1x" + stripRepeater.itemAt(i).stripColumns)
             }
         }
-        for (var j = 0; j < gridR.count; j++) {
-            if (gridR.itemAt(j).count !== 0) {
-                for (var l = 0; l < gridR.itemAt(j).count; l++) {
-                    chosenElectrodesList.append({ columns: gridR.itemAt(j).gridColumns, rows: gridR.itemAt(j).gridRows })
+        for (var j = 0; j < gridRepeater.count; j++) {
+            if (gridRepeater.itemAt(j).count !== 0) {
+                for (var l = 0; l < gridRepeater.itemAt(j).count; l++) {
+                    chosenElectrodesList.append({ columns: gridRepeater.itemAt(j).gridColumns, rows: gridRepeater.itemAt(j).gridRows })
                 }
-                console.log(gridR.itemAt(j).count + "x grid " + gridR.itemAt(j).gridRows + "x" + gridR.itemAt(j).gridColumns)
+                console.log(gridRepeater.itemAt(j).count + "x grid " + gridRepeater.itemAt(j).gridRows + "x" + gridRepeater.itemAt(j).gridColumns)
             }
         }
         return chosenElectrodesList

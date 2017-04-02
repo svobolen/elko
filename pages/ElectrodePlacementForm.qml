@@ -10,31 +10,19 @@ Controls.SplitView {
 
     property alias zoomSwitch: zoomSwitch
     property alias fixButton: fixButton
+    property alias resetButton: resetButton
     property alias comboBox: comboBox
     property alias exportButton: exportButton
-    //property alias elecList: elecList
+    property alias electrodeRep: electrodeRep
     property alias fileDialog: fileDialog
     property alias electrodePlacement: electrodePlacement
 
     property var name
     property int zHighest: 1
-    property int currListIndex: -1
+    property int currIndex: -1
     property bool zoomEnabled: false
     property var images: []
-    property ListModel electrodes: ListModel {
-//        ListElement {columns: 5; rows: 2}
-//        ListElement {columns: 5; rows: 3}
-//        ListElement {columns: 5; rows: 4}
-//        ListElement {columns: 5; rows: 2}
-//        ListElement {columns: 5; rows: 3}
-//        ListElement {columns: 5; rows: 4}
-//        ListElement {columns: 5; rows: 2}
-//        ListElement {columns: 5; rows: 3}
-//        ListElement {columns: 20; rows: 4}
-//        ListElement {columns: 5; rows: 2}
-//        ListElement {columns: 5; rows: 3}
-//        ListElement {columns: 5; rows: 4}
-    }
+    property ListModel electrodes: ListModel {}
     orientation: Qt.Horizontal
 
     DropArea {
@@ -42,6 +30,7 @@ Controls.SplitView {
         width: 3/4*parent.width
         height: parent.height
         Layout.minimumWidth: 100
+
         Rectangle {
             anchors.fill: parent
             color: "white"
@@ -78,18 +67,20 @@ Controls.SplitView {
         }
     }
 
-    Controls.SplitView {
-        orientation: Qt.Vertical
-        resizing: false
+    Flickable {
+        Layout.minimumWidth: 100
+        contentHeight: rect.height
+        contentWidth: rect.width
+        boundsBehavior: Flickable.OvershootBounds
 
         Rectangle {
-            width: secondColumn.width
-            height: secondColumn.height
+            id: rect
+            width: column.width
+            height: column.height
             Layout.minimumWidth: 100
             color: "white"
-            z:2
             Column {
-                id: secondColumn
+                id: column
                 spacing: 10
                 padding: 5
 
@@ -105,102 +96,69 @@ Controls.SplitView {
                 }
                 ComboBox {
                     id: comboBox
-                    model: ["indexes", "wave names", "indexes + waves"]
+                    model: ["indexes", "track names", "indexes + tracks"]
                     currentIndex: 2
                     displayText: "Display: " + currentText
                 }
                 Button {
                     id: resetButton
-                    text: qsTr("Reset positions")
+                    text: qsTr("Reset")
                 }
                 Button {
                     id: exportButton
                     text: qsTr("Export image")
+                    FileDialog {
+                        id: fileDialog
+                        folder: shortcuts.documents
+                        selectExisting: false
+                        nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+                    }
                 }
-                FileDialog {
-                    id: fileDialog
-                    folder: shortcuts.documents
-                    selectExisting: false
-                    nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
-                }
-            }
-        }
+                Repeater {
+                    id: electrodeRep
+                    model: electrodes
+                    delegate: Row {
+                        id: elRow
+                        property alias elec: electrode
+                        padding: 5
+                        spacing: 5
 
-        Flickable {
-            Layout.minimumWidth: 100
-            contentHeight: electrodeColumn.height
-            contentWidth: electrodeColumn.width
-            boundsBehavior: Flickable.OvershootBounds
-
-            Rectangle {
-                width: electrodeColumn.width
-                height: electrodeColumn.height
-                Layout.minimumWidth: 100
-                color: "white"
-                Column {
-                    id: electrodeColumn
-                    spacing: 10
-                    padding: 5
-
-                    Repeater {
-                        model: electrodes
-                        delegate: Row {
-                            id: elRow
-                            property alias elec: electrode
-                            padding: 5
-                            spacing: 5
-
-                            Label {
-                                text: rows + "x" + columns
-                                anchors.verticalCenter: parent.verticalCenter
+                        Label {
+                            text: rows + "x" + columns
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Button {
+                            id: plusButton
+                            text: "+"
+                            background: Rectangle {
+                                implicitWidth: 20
+                                implicitHeight: 20
+                                color: plusButton.down ? "#d6d6d6" : "#f6f6f6"
+                                border.color: "black"
+                                border.width: 1
+                                radius: 20
                             }
-                            Button {
-                                id: plusButton
-                                text: "+"
-                                background: Rectangle {
-                                    implicitWidth: 20
-                                    implicitHeight: 20
-                                    color: plusButton.down ? "#d6d6d6" : "#f6f6f6"
-                                    border.color: "black"
-                                    border.width: 1
-                                    radius: 20
-                                }
-                                anchors.verticalCenter: parent.verticalCenter
-                                onClicked: {
-                                    electrodes.insert(index + 1, { columns: columns, rows: rows, links: links})
-                                }
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                electrodes.insert(index + 1, { columns: columns, rows: rows, links: links})
                             }
-                            Electrode {
-                                id: electrode
-                                columnCount: columns
-                                rowCount: rows
-                                indexNumber: index
-                                linksList: links
-                                //                draggable: true
-                            }
+                        }
+                        Electrode {
+                            id: electrode
+                            columnCount: columns
+                            rowCount: rows
+                            indexNumber: index
+                            linksList: links
+                            //                draggable: true
                         }
                     }
                 }
             }
-            ScrollIndicator.vertical: ScrollIndicator { }
-            ScrollIndicator.horizontal: ScrollIndicator { }
+
         }
+        ScrollIndicator.vertical: ScrollIndicator { }
+        ScrollIndicator.horizontal: ScrollIndicator { }
     }
-}
 
-
-
-//    onCurrListIndexChanged: {
-//        elecList.currentIndex = currListIndex
-//        elecList.currentItem.z = ++zHighest
-//    }
-// }
-
-
-
-
-
-
-
-
-
+    onCurrIndexChanged: { electrodeRep.itemAt(currIndex).z = ++zHighest }
+ }

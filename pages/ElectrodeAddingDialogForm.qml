@@ -4,8 +4,8 @@ import QtQuick.Controls 2.0
 
 Popup {
     property alias addDialog: addDialog
-    property alias okB: okButton
-    property alias cancelB: closeButton
+    property alias okButton: okButton
+    property alias cancelButton: closeButton
     property alias rowSpinBox: rowSpinBox
     property alias columnSpinBox: columnSpinBox
 
@@ -28,12 +28,14 @@ Popup {
             id: rowSpinBox
             from: 1
             value: 1
+            editable: true
         }
         Label { text: qsTr("Columns") }
         SpinBox {
             id: columnSpinBox
             from: 1
             value: 5
+            editable: true
         }
         Button {
             id: okButton

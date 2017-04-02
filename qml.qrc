@@ -24,7 +24,6 @@
         <file>pages/BrainForm.qml</file>
         <file>pages/ElectrodeAddingDialogForm.qml</file>
         <file>pages/ImageManagerForm.qml</file>
-        <file>pages/SwipePageForm.qml</file>
         <file>pages/ElectrodePlacementForm.qml</file>
         <file>pages/ElectrodePlacement.qml</file>
         <file>pages/Electrode.qml</file>

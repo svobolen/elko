@@ -98,13 +98,14 @@ ApplicationWindow {
 
             ListModel {
                 id: pageModel
-                ListElement { title: "Load file"; source: "qrc:/pages/LoadFile.qml" }
                 ListElement { title: "Image Manager"; source: "qrc:/pages/ImageManager.qml" }
                 ListElement { title: "Electrode Manager"; source: "qrc:/pages/ElectrodeManager.qml" }
                 ListElement { title: "Link Signal with Electrode"; source: "qrc:/pages/ElectrodeSignalLink.qml"}
                 ListElement { title: "Electrode Placement"; source: "qrc:/pages/ElectrodePlacement.qml" }
             }
         }
+
+
     }
 
     StackView {     //inicializace stacku, uvodni stranka
@@ -132,6 +133,11 @@ ApplicationWindow {
                     pane.x = 0
                     pane.y = 0
                 }
+            }
+        }
+        replaceEnter: Transition {
+            XAnimator {
+                duration: 0
             }
         }
     }
@@ -189,13 +195,13 @@ ApplicationWindow {
         nameFilters: [ "", "All files (*)" ]
         folder: shortcuts.documents
         onAccepted: {
-//            var path = fileDialog.fileUrl
-//            if (fileDialog.checkIfImage(path.toString())) {
-//                fileDialog.addImage(path)
-//            } else {
-//                console.log("Chosen file is not an image.")
-//                info.open()
-//            }
+            //            var path = fileDialog.fileUrl
+            //            if (fileDialog.checkIfImage(path.toString())) {
+            //                fileDialog.addImage(path)
+            //            } else {
+            //                console.log("Chosen file is not an image.")
+            //                info.open()
+            //            }
         }
         onRejected: console.log("Choosing file canceled.")
     }
