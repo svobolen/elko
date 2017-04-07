@@ -14,6 +14,12 @@ ApplicationWindow {
 
     header: ToolBar {
 
+        background: Rectangle {
+            implicitHeight: 40
+            color: "skyblue"
+            opacity: 0.3
+        }
+
         RowLayout {
             spacing: 20
             anchors.fill: parent
@@ -75,8 +81,17 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: Math.min(window.width, window.height) / 3 * 2
+        width: Math.min(window.width, window.height) / 3 * 1.5
         height: window.height
+
+        background: Rectangle {
+            Rectangle {
+                x: parent.width - 1
+                width: 1
+                height: parent.height
+                color: "skyblue"
+            }
+        }
 
         ListView {
             id: listView
@@ -85,9 +100,18 @@ ApplicationWindow {
 
 
             delegate: ItemDelegate {
+                id: control
                 width: parent.width
                 text: model.title
                 highlighted: ListView.isCurrentItem
+
+                background: Rectangle {
+                    implicitWidth: 100
+                    implicitHeight: 40
+                    opacity: control.down ? 0.3 : 1
+                    color: control.down ? "skyblue" : "white"
+                }
+
                 onClicked: {
                     changePage(model.title, model.source, index)
                     drawer.close()
@@ -179,32 +203,32 @@ ApplicationWindow {
         }
     }
 
-//    FileDialog {
-//        id: saveDialog
-//        folder: shortcuts.documents
-//        selectExisting: false
-//        nameFilters: [ "All files (*)" ]
-//        onAccepted: {
+    FileDialog {
+        id: saveDialog
+        folder: shortcuts.documents
+        selectExisting: false
+        nameFilters: [ "All files (*)" ]
+        onAccepted: {
 
-//        }
-//        onRejected: console.log("Saving file canceled.")
-//    }
+        }
+        onRejected: console.log("Saving file canceled.")
+    }
 
-//    FileDialog {
-//        id: openDialog
-//        nameFilters: [ "", "All files (*)" ]
-//        folder: shortcuts.documents
-//        onAccepted: {
-//            //            var path = fileDialog.fileUrl
-//            //            if (fileDialog.checkIfImage(path.toString())) {
-//            //                fileDialog.addImage(path)
-//            //            } else {
-//            //                console.log("Chosen file is not an image.")
-//            //                info.open()
-//            //            }
-//        }
-//        onRejected: console.log("Choosing file canceled.")
-//    }
+    FileDialog {
+        id: openDialog
+        nameFilters: [ "", "All files (*)" ]
+        folder: shortcuts.documents
+        onAccepted: {
+            //            var path = fileDialog.fileUrl
+            //            if (fileDialog.checkIfImage(path.toString())) {
+            //                fileDialog.addImage(path)
+            //            } else {
+            //                console.log("Chosen file is not an image.")
+            //                info.open()
+            //            }
+        }
+        onRejected: console.log("Choosing file canceled.")
+    }
 
     function changePage(title, source, index) {
         if (listView.currentIndex !== index) {

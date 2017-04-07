@@ -83,7 +83,7 @@ Pane {
                     model: imageModel
                     Brain {
                         sourceImg: model.sourcePath
-                        //  checkboxVisible: true
+                        checkboxVisible: (model.sourcePath === "qrc:/images/plus.png") ? false : true
                     }
                 }
             }

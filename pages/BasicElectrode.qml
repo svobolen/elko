@@ -8,7 +8,7 @@ Item {
     property int size: 20
     property bool droppingEnabled: false
     property string color: "white"
-    property ListModel links: ListModel { }
+    property ListModel linkedTracks: ListModel { }
 
     width: columnCount*size; height: rowCount*size;
 
@@ -76,25 +76,25 @@ Item {
                             onTrackNameChanged: {
                                 if (nameToChange) {
                                     if (trackName === "") {
-                                        for (var i = 0; i < links.count; i++) {
-                                            if (links.get(i).electrodeNumber === defaultName) {
-                                                links.remove(i)
+                                        for (var i = 0; i < linkedTracks.count; i++) {
+                                            if (linkedTracks.get(i).electrodeNumber === defaultName) {
+                                                linkedTracks.remove(i)
                                                 break
                                             }
                                         }
                                     } else {
-                                        links.append( { electrodeNumber: defaultName, wave: name})
+                                        linkedTracks.append( { electrodeNumber: defaultName, wave: name})
                                     }
                                 }
                             }
 
                             Component.onCompleted: {
-                                if (links !== null) {
+                                if (linkedTracks !== null) {
                                     nameToChange = false
-                                    for (var i = 0; i < links.count; i++) {
-                                        if (links.get(i).electrodeNumber === defaultName) {
-                                            name = links.get(i).wave
-                                            trackName = links.get(i).wave
+                                    for (var i = 0; i < linkedTracks.count; i++) {
+                                        if (linkedTracks.get(i).electrodeNumber === defaultName) {
+                                            name = linkedTracks.get(i).wave
+                                            trackName = linkedTracks.get(i).wave
                                             electrodeText.font.bold = true
                                         }
                                     }

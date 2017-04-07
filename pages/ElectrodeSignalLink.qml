@@ -16,7 +16,9 @@ ElectrodeSignalLinkForm {
         linkedElectrodesList.clear()
 
         for (var i = 0; i < elecRep.count; i++) {
-            linkedElectrodesList.append({ rows: elecRep.itemAt(i).bElectrode.rowCount, columns: elecRep.itemAt(i).bElectrode.columnCount, links: elecRep.itemAt(i).bElectrode.links})
+            linkedElectrodesList.append({ rows: elecRep.itemAt(i).bElectrode.rowCount,
+                                          columns: elecRep.itemAt(i).bElectrode.columnCount,
+                                          links: elecRep.itemAt(i).bElectrode.linkedTracks})
         }
         return linkedElectrodesList
     }

@@ -66,7 +66,7 @@ Image {
                 x: 6
                 y: 6
                 radius: 2
-                color: checkbox.checked ? "green" : "black"
+                color: checkbox.checked ? "skyblue" : "black"
                 visible: checkbox.checked
             }
         }

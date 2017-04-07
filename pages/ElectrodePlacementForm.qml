@@ -14,7 +14,7 @@ Controls.SplitView {
     property alias comboBox: comboBox
     property alias exportButton: exportButton
     property alias electrodeRep: electrodeRep
-    //property alias fileDialog: fileDialog
+    property alias fileDialog: fileDialog
     property alias electrodePlacement: electrodePlacement
 
     property var name
@@ -107,12 +107,12 @@ Controls.SplitView {
                 Button {
                     id: exportButton
                     text: qsTr("Export image")
-//                    FileDialog {
-//                        id: fileDialog
-//                        folder: shortcuts.documents
-//                        selectExisting: false
-//                        nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
-//                    }
+                    FileDialog {
+                        id: fileDialog
+                        folder: shortcuts.documents
+                        selectExisting: false
+                        nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+                    }
                 }
                 Repeater {
                     id: electrodeRep
@@ -143,7 +143,12 @@ Controls.SplitView {
                                 if(electrode.basicE.x !== 0 & electrode.basicE.y !== 0) {
                                     var component = Qt.createComponent("qrc:/pages/Electrode.qml")
                                     var sameElec = component.createObject(electrode, {"columnCount": columns, "rowCount": rows, "linkList": links, "color": electrode.basicE.color});
-                                    console.log("New view on electrode added.")
+                                    console.log("New view on electrode " + rows + "x" + columns + " added.")
+                                }
+                                for (var i = 0; i < electrode.children.length; i++) {
+                                    if(electrode.children[i].columnCount != null) {
+                                        console.log(electrode.children[i].columnCount);
+                                    }
                                 }
                             }
 

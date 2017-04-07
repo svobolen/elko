@@ -34,7 +34,7 @@ Item {
             rowCount: root.rowCount
             size: root.size
             droppingEnabled: false
-            links: linkList
+            linkedTracks: linkList
 
             Behavior on scale { NumberAnimation { duration: 200 } }
             Behavior on x { NumberAnimation { duration: 200 } }
