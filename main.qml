@@ -185,13 +185,19 @@ ApplicationWindow {
             }
             Label {
                 width: aboutDialog.availableWidth
-                text: "Author: Lenka Svobodová "
+                text: "Author:    Lenka Svobodová "
                 wrapMode: Label.Wrap
                 font.pixelSize: 12
             }
             Label {
                 width: aboutDialog.availableWidth
-                text: "Year: 2017"
+                text: "E-mail:    svobole5@fel.cvut.cz "
+                wrapMode: Label.Wrap
+                font.pixelSize: 12
+            }
+            Label {
+                width: aboutDialog.availableWidth
+                text: "Year:      2017"
                 wrapMode: Label.Wrap
                 font.pixelSize: 12
             }

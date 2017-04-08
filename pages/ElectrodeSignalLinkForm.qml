@@ -1,15 +1,16 @@
-import QtQuick.Controls 2.0
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 1.4
+import QtQuick.Controls 1.4 as Controls
 import QtQuick.Controls 2.0
 
-SplitView {
+Controls.SplitView {
     property var name
     property var electrodes
 
     property alias confirmButton: confirmButton
     property alias elecRep: elecRep
+    property alias dragRep: dragRep
+    property alias xmlModels: xmlModels
 
     Flickable {
         contentHeight: destItem.height
@@ -83,10 +84,12 @@ SplitView {
                     spacing: 10
                     padding: 10
                     Repeater {
+                        id: dragRep
                         model: xmlModels.trackModel
                         DragTrack {
                             size: 40
                             trackName: label.replace(/\s+/g, '') //without whitespaces
+                            trackId: index
                         }
                     }
                 }

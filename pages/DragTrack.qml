@@ -4,10 +4,14 @@ DragTrackForm {
 
     mouseArea.onReleased: {
         mouseArea.parent = (tile.Drag.target === null || tile.Drag.target.alreadyContainsDrag) ?  root : tile.Drag.target
-        if (tile.Drag.target !== null) {
-            tile.Drag.target.alreadyContainsDrag = true
-            tile.Drag.target.name = trackName
-            tile.Drag.target.trackName = trackName
+        if (mouseArea.parent !== root) {
+            mouseArea.parent.alreadyContainsDrag = true
+            mouseArea.parent.name = trackName
+            mouseArea.parent.trackName = trackName
+            mouseArea.parent.trackId = trackId
+
+            console.log("Track " + trackName + " has been linked to position " + mouseArea.parent.defaultName
+                        + " on electrode " + mouseArea.parent.rowCount + "x" + mouseArea.parent.columnCount + ".")
         }
     }
 
@@ -16,6 +20,8 @@ DragTrackForm {
             mouseArea.parent.alreadyContainsDrag = false
             mouseArea.parent.name = mouseArea.parent.defaultName
             mouseArea.parent.trackName = ""
+            mouseArea.parent.trackId = -1
+            mouseArea.parent.spikes = 0
         }
     }
     tile.states: State {

@@ -16,16 +16,19 @@ Controls.SplitView {
     property alias electrodeRep: electrodeRep
     property alias fileDialog: fileDialog
     property alias electrodePlacement: electrodePlacement
+    property alias statisticsButton: statisticsButton
 
     property var name
     property int zHighest: 1
     property int currIndex: -1
     property bool zoomEnabled: false
     property var images: []
+    property int minSpikes: 0
+    property int maxSpikes: 0
     property ListModel electrodes: ListModel {}
     orientation: Qt.Horizontal
 
-    DropArea {
+    Item {
         id: imageArea
         width: 3/4*parent.width
         height: parent.height
@@ -99,6 +102,63 @@ Controls.SplitView {
                     model: ["indexes", "track names", "indexes + tracks"]
                     currentIndex: 2
                     displayText: "Display: " + currentText
+                }
+                Button {
+                    id: statisticsButton
+                    text: qsTr("Show spikes statistics")
+                }
+                Item {
+                    height: 20
+                    width: 250
+                    Label {
+                        x: 0
+                        text: qsTr("min")
+                    }
+                    Rectangle {
+                        width: 20
+                        height: 200
+                        x: 111
+                        y: -90
+                        clip: true
+                        rotation: -90
+                        gradient: Gradient {
+                            GradientStop { position: 0.0; color: "indigo" }
+                            GradientStop { position: 0.2; color: "blue"}
+                            GradientStop { position: 0.4; color: "green"}
+                            GradientStop { position: 0.6; color: "yellow"}
+                            GradientStop { position: 0.8; color: "orange"}
+                            GradientStop { position: 1.0; color: "red" }
+                        }
+                    }
+                    Label {
+                        x: 223
+                        text: qsTr("max")
+                    }
+                }
+                Item{
+                    id: gradientLabels
+                    height: 20
+                    width: 200
+                    Label {
+                        x:18
+                        text: minSpikes
+                    }
+                    Label {
+                        x: 68
+                        text: (maxSpikes - minSpikes)/4
+                    }
+                    Label {
+                        x:118
+                        text: (maxSpikes - minSpikes)/2
+                    }
+                    Label {
+                        x: 168
+                        text: 3*(maxSpikes - minSpikes)/4
+                    }
+                    Label {
+                        x:218
+                        text: maxSpikes
+                    }
                 }
                 Button {
                     id: resetButton

@@ -8,7 +8,9 @@ Item {
     property int size: 20
     property bool droppingEnabled: false
     property string color: "white"
-    property ListModel linkedTracks: ListModel { }
+    property ListModel linkedTracks: ListModel { }  //ListElement {electrodeNumber: defaultName, wave: trackName}
+
+    property alias rowRep: rowRep
 
     width: columnCount*size; height: rowCount*size;
 
@@ -34,10 +36,14 @@ Item {
                             id: dropArea
                             readonly property int defaultName: columnCount * ( rowCount - row.getIndex() ) + ( modelData + 1 )
                             property alias name: electrodeText.text
+                            property int columnCount: root.columnCount  //for console logs (signal link)
+                            property int rowCount: root.rowCount        //for console logs (signal link)
                             property string trackName: ""
                             property bool alreadyContainsDrag: false
-                            property var signalData
+                            property int trackId: -1
                             property bool nameToChange: true
+                            property alias colorFill: dropRectangle.color
+                            property int spikes: 0
 
                             width: size; height: size
                             enabled: droppingEnabled
@@ -47,6 +53,7 @@ Item {
                                 opacity: 0.8
                                 width: size; height: size; radius: size/2
                                 border.color: "grey"
+                                color: "white"
 
                                 states: [
                                     State {
@@ -83,7 +90,15 @@ Item {
                                             }
                                         }
                                     } else {
-                                        linkedTracks.append( { electrodeNumber: defaultName, wave: name})
+                                        linkedTracks.append( { electrodeNumber: defaultName, wave: name, spikes: 0})
+                                    }
+                                }
+                            }
+
+                            onSpikesChanged: {
+                                for (var i = 0; i < linkedTracks.count; i++) {
+                                    if (linkedTracks.get(i).electrodeNumber === defaultName) {
+                                        linkedTracks.get(i).spikes = spikes
                                     }
                                 }
                             }
@@ -95,6 +110,7 @@ Item {
                                         if (linkedTracks.get(i).electrodeNumber === defaultName) {
                                             name = linkedTracks.get(i).wave
                                             trackName = linkedTracks.get(i).wave
+                                            spikes = linkedTracks.get(i).spikes
                                             electrodeText.font.bold = true
                                         }
                                     }
@@ -114,26 +130,6 @@ Item {
                     function getIndex() {
                         return index + 1
                     }
-                }
-            }
-        }
-    }
-
-    function changeNames(comboBoxValue) {
-        for (var k = 0; k < rowCount; k++) {
-            for (var l = 0; l < columnCount; l++) {
-                switch (comboBoxValue) {
-                case 0: // only default name
-                    rowRep.itemAt(k).colRep.itemAt(l).name = rowRep.itemAt(k).colRep.itemAt(l).defaultName;
-                    break;
-                case 1: // only wave names (non-linked are empty)
-                    rowRep.itemAt(k).colRep.itemAt(l).name = rowRep.itemAt(k).colRep.itemAt(l).trackName
-                    break;
-                default: // wave names, non-linked default name
-                    rowRep.itemAt(k).colRep.itemAt(l).name =
-                            (rowRep.itemAt(k).colRep.itemAt(l).trackName === "") ?
-                                rowRep.itemAt(k).colRep.itemAt(l).defaultName : rowRep.itemAt(k).colRep.itemAt(l).trackName
-                    break;
                 }
             }
         }

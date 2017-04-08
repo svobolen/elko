@@ -4,6 +4,8 @@ Item {
     id: root
     property int size: 20
     property string trackName: "X"
+    property int trackId: -1
+    property int spikes: 0
 
     property alias mouseArea: mouseArea
     property alias tile: tile
@@ -34,6 +36,12 @@ Item {
                 horizontalAlignment:Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
+        }
+    }
+
+    onSpikesChanged: {
+        if (mouseArea.parent !== root) {
+            mouseArea.parent.spikes = spikes
         }
     }
 }
