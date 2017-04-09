@@ -33,27 +33,29 @@ ElectrodePlacementForm {
         var gradientColor
         var currElec
         for (var m = 0; m < electrodeRep.count; m++) {
-            currElec = electrodeRep.itemAt(m).elec.basicE
-            for (var k = 0; k < currElec.rowCount; k++) {
-                for (var l = 0; l < currElec.columnCount; l++) {
-                    if(currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes !== 0) {
-                        console.log("show spikes " + currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName
-                                    + " " + currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes)
+            for (var j = 0; j < electrodeRep.itemAt(m).elec.children.length; j++) {
+                currElec = electrodeRep.itemAt(m).elec.children[j].basicE
+                for (var k = 0; k < currElec.rowCount; k++) {
+                    for (var l = 0; l < currElec.columnCount; l++) {
+                        if(currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes !== 0) {
+                            console.log("show spikes " + currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName
+                                        + " " + currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes)
 
-                        if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < i) {
-                            gradientColor = "indigo"
-                        } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < ii) {
-                            gradientColor = "blue"
-                        } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < iii) {
-                            gradientColor = "green"
-                        } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < iv) {
-                            gradientColor = "yellow"
-                        } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < v) {
-                            gradientColor = "orange"
-                        } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes > v) {
-                            gradientColor = "red"
+                            if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < i) {
+                                gradientColor = "indigo"
+                            } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < ii) {
+                                gradientColor = "blue"
+                            } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < iii) {
+                                gradientColor = "green"
+                            } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < iv) {
+                                gradientColor = "yellow"
+                            } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes < v) {
+                                gradientColor = "orange"
+                            } else if (currElec.rowRep.itemAt(k).colRep.itemAt(l).spikes > v) {
+                                gradientColor = "red"
+                            }
+                            currElec.rowRep.itemAt(k).colRep.itemAt(l).colorFill = gradientColor
                         }
-                        currElec.rowRep.itemAt(k).colRep.itemAt(l).colorFill = gradientColor
                     }
                 }
             }
@@ -69,39 +71,36 @@ ElectrodePlacementForm {
     }
 
     fixButton.onCheckedChanged: {
+        var electrodeI
         for (var i = 0; i < electrodeRep.count; i++) {
-            var electrodeI = electrodeRep.itemAt(i).elec
-
-            electrodeI.draggable = !fixButton.checked
-            electrodeI.mouseArea.drag.target =
-                    (fixButton.checked) ? null : electrodeI.basicE
-            for (var j = 0; j < electrodeI.children.length; j++) {
-                if(electrodeI.children[j].columnCount != null) {
-                    electrodeI.children[j].draggable = !fixButton.checked
-                    electrodeI.children[j].mouseArea.drag.target =
-                            (fixButton.checked) ? null : electrodeI.children[j].basicE
-                }
+            for (var j = 0; j < electrodeRep.itemAt(i).elec.children.length; j++) {
+                electrodeI = electrodeRep.itemAt(i).elec.children[j]
+                electrodeI.draggable = !fixButton.checked
+                electrodeI.mouseArea.drag.target = (fixButton.checked) ? null : electrodeI.basicE
             }
         }
     }
 
     function changeNames(comboBoxValue) {
+        var currElec
         for (var i = 0; i < electrodeRep.count; i++) {
-            var currElec = electrodeRep.itemAt(i).elec.basicE
-            for (var k = 0; k < currElec.rowCount; k++) {
-                for (var l = 0; l < currElec.columnCount; l++) {
-                    switch (comboBoxValue) {
-                    case 0: // only default name
-                        currElec.rowRep.itemAt(k).colRep.itemAt(l).name = currElec.rowRep.itemAt(k).colRep.itemAt(l).defaultName;
-                        break;
-                    case 1: // only wave names (non-linked are empty)
-                        currElec.rowRep.itemAt(k).colRep.itemAt(l).name = currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName
-                        break;
-                    default: // wave names, non-linked default name
-                        currElec.rowRep.itemAt(k).colRep.itemAt(l).name =
-                                (currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName === "") ?
-                                    currElec.rowRep.itemAt(k).colRep.itemAt(l).defaultName : currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName
-                        break;
+            for (var j = 0; j < electrodeRep.itemAt(i).elec.children.length; j++) {
+                currElec = electrodeRep.itemAt(i).elec.children[j].basicE
+                for (var k = 0; k < currElec.rowCount; k++) {
+                    for (var l = 0; l < currElec.columnCount; l++) {
+                        switch (comboBoxValue) {
+                        case 0: // only default name
+                            currElec.rowRep.itemAt(k).colRep.itemAt(l).name = currElec.rowRep.itemAt(k).colRep.itemAt(l).defaultName;
+                            break;
+                        case 1: // only wave names (non-linked are empty)
+                            currElec.rowRep.itemAt(k).colRep.itemAt(l).name = currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName
+                            break;
+                        default: // wave names, non-linked default name
+                            currElec.rowRep.itemAt(k).colRep.itemAt(l).name =
+                                    (currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName === "") ?
+                                        currElec.rowRep.itemAt(k).colRep.itemAt(l).defaultName : currElec.rowRep.itemAt(k).colRep.itemAt(l).trackName
+                            break;
+                        }
                     }
                 }
             }

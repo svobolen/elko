@@ -6,6 +6,8 @@ import QtQuick.Controls 2.0
 Controls.SplitView {
     property var name
     property var electrodes
+    property int maxSpikes: 0
+    property int minSpikes: 0
 
     property alias confirmButton: confirmButton
     property alias elecRep: elecRep

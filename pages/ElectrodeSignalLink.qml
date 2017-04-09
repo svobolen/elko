@@ -5,12 +5,11 @@ ElectrodeSignalLinkForm {
 
     confirmButton.onClicked: {
         readXml()
-        console.log("min " + readXml().min + ", max " + readXml().max)
         fillLinkedElectrodesList()
         listView.currentIndex = 3   //index v listview
         titleLabel.text = "Electrode Placement"
         stackView.push( "qrc:/pages/ElectrodePlacement.qml", {"electrodes": linkedElectrodesList, "images": window.images,"name": "Electrode Placement",
-                       "minSpikes": readXml().min, "maxSpikes": readXml().max} )
+                       "minSpikes": minSpikes, "maxSpikes": maxSpikes} )
     }
 
     ListModel { id: linkedElectrodesList } //ListElement { rows: rowCount, columns: columnCount, links: links}
@@ -31,6 +30,7 @@ ElectrodeSignalLinkForm {
 
         for (var i = 0; i < xmlModels.trackModel.count; i++) {
             spikes = 0
+            dragRep.itemAt(i).spikes = 0    //////////////
             for (var j = 0; j < xmlModels.eventModel.count; j++) {
                 if (i == xmlModels.eventModel.get(j).channel) {
                     spikes++
@@ -41,11 +41,12 @@ ElectrodeSignalLinkForm {
             if (spikes > max) { max = spikes }
 
             dragRep.itemAt(i).spikes = spikes
-            console.log(i + " " + xmlModels.trackModel.get(i).label.replace(/\s+/g, '') + " has " + spikes + " spikes.")
+            console.log(xmlModels.trackModel.get(i).label.replace(/\s+/g, '') + " (" + i + ") has " + spikes + " spike(s).")
         }
-        console.log("min " + min)
-        console.log("max " + max)
-        return {min: min, max: max}
+        console.log("Minimum is " + min + " spike(s).")
+        console.log("Maximum is " + max + " spikes.")
+        minSpikes = min
+        maxSpikes = max
     }
 }
 

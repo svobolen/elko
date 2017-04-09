@@ -236,19 +236,24 @@ ApplicationWindow {
         onRejected: console.log("Choosing file canceled.")
     }
 
-    function changePage(title, source, index) {
-        if (listView.currentIndex !== index) {
-            listView.currentIndex = index
+    function changePage(title, source, indexNum) {
+        if (listView.currentIndex !== indexNum) {
+            listView.currentIndex = indexNum
             titleLabel.text = title
 
-            var stackItem = stackView.find(function(item, index) {
-                return item.name === title })
+            var stackIndex = -1
+            var stackItem = stackView.find(function(item, index) { return  item.name === title})
 
             if (stackItem === null) {
                 stackView.push(source, {"name": title})
             } else {
                 stackView.push(stackItem)
             }
+
+//            for (var i = 0; i < stackView.depth; i++) {
+//                console.log(i + " " + stackView.get(i).name)
+//            }
+//            console.log("")
         }
     }
 }

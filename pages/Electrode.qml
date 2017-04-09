@@ -14,15 +14,18 @@ Item {
     property alias basicE: electrode
     property alias mouseArea: mouseArea
     property ListModel linkList
+
     width: columnCount*size; height: rowCount*size;
+
     Rectangle {
         id: sourceBorder;
         anchors.fill: parent;
-        border.color: "black";
+        border.color: (color == "#ffffff") ? "black" : color
         radius: size/2
-
     }
-    onColorChanged: sourceBorder.border.color = (color === "white") ? "black" : color
+    onColorChanged: {
+        sourceBorder.border.color = color
+    }
 
     Flickable {
         id: flick
@@ -91,22 +94,22 @@ Item {
                     }
                     onReleased: {
 
-//                        electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
-//                        console.log("po " + electrode.parent)
+                        //                        electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
+                        //                        console.log("po " + electrode.parent)
 
-//                        if(previousParent === root && electrode.parent !== root) {
-//                            console.log("tady")
-//                            electrode.x = electrode.x + electrode.parent.width
-//                            electrode.y = electrode.y + root.y + 250
-//                        } else if (electrode.parent === root){
-//                            electrode.rotation = 0
-//                            electrode.scale = 1
-//                            electrode.x = 0
-//                            electrode.y = 0
-//                        }
-//                        console.log(electrode.parent)
-//                        console.log(electrode.x)
-//                        console.log(electrode.y)
+                        //                        if(previousParent === root && electrode.parent !== root) {
+                        //                            console.log("tady")
+                        //                            electrode.x = electrode.x + electrode.parent.width
+                        //                            electrode.y = electrode.y + root.y + 250
+                        //                        } else if (electrode.parent === root){
+                        //                            electrode.rotation = 0
+                        //                            electrode.scale = 1
+                        //                            electrode.x = 0
+                        //                            electrode.y = 0
+                        //                        }
+                        //                        console.log(electrode.parent)
+                        //                        console.log(electrode.x)
+                        //                        console.log(electrode.y)
                     }
                     Menu {
                         id: menu
@@ -144,6 +147,7 @@ Item {
                                 onMenuClicked: {
                                     electrode.color = itemColor
                                     sourceBorder.border.color = itemColor
+                                    root.parent.color = itemColor
                                     menu.close()
                                 }
 

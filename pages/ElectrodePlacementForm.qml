@@ -107,6 +107,40 @@ Controls.SplitView {
                     id: statisticsButton
                     text: qsTr("Show spikes statistics")
                 }
+                Item{
+                    id: percentageGradLabels
+                    height: 12
+                    width: 230
+                    Label {
+                        x:18
+                        text: "0"
+                    }
+                    Label {
+                        x: 35
+                        text: "0.1"
+                    }
+                    Label {
+                        x:75
+                        text: "0.3"
+                    }
+                    Label {
+                        x: 115
+                        text: "0.5"
+                    }
+                    Label {
+                        x: 155
+                        text: "0.7"
+                    }
+                    Label {
+                        x: 195
+                        text: "0.9"
+                    }
+                    Label {
+                        x:218
+                        text: "1"
+                    }
+                }
+
                 Item {
                     height: 20
                     width: 250
@@ -144,16 +178,24 @@ Controls.SplitView {
                         text: minSpikes
                     }
                     Label {
-                        x: 68
-                        text: (maxSpikes - minSpikes)/4
+                        x: 35
+                        text: Math.round(0.1*(maxSpikes - minSpikes))
                     }
                     Label {
-                        x:118
-                        text: (maxSpikes - minSpikes)/2
+                        x:75
+                        text: Math.round(0.3*(maxSpikes - minSpikes))
                     }
                     Label {
-                        x: 168
-                        text: 3*(maxSpikes - minSpikes)/4
+                        x: 115
+                        text: Math.round(0.5*(maxSpikes - minSpikes))
+                    }
+                    Label {
+                        x: 155
+                        text: Math.round(0.7*(maxSpikes - minSpikes))
+                    }
+                    Label {
+                        x: 195
+                        text: Math.round(0.9*(maxSpikes - minSpikes))
                     }
                     Label {
                         x:218
@@ -179,7 +221,7 @@ Controls.SplitView {
                     model: electrodes
                     delegate: Row {
                         id: elRow
-                        property alias elec: electrode
+                        property alias elec: elecItem
                         padding: 5
                         spacing: 5
 
@@ -200,25 +242,31 @@ Controls.SplitView {
                             }
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
-                                if(electrode.basicE.x !== 0 & electrode.basicE.y !== 0) {
-                                    var component = Qt.createComponent("qrc:/pages/Electrode.qml")
-                                    var sameElec = component.createObject(electrode, {"columnCount": columns, "rowCount": rows, "linkList": links, "color": electrode.basicE.color});
-                                    console.log("New view on electrode " + rows + "x" + columns + " added.")
-                                }
-                                for (var i = 0; i < electrode.children.length; i++) {
-                                    if(electrode.children[i].columnCount != null) {
-                                        console.log(electrode.children[i].columnCount);
-                                    }
-                                }
+                                var component = Qt.createComponent("qrc:/pages/Electrode.qml")
+                                var sameElec = component.createObject(elecItem, {"columnCount": columns, "rowCount": rows, "linkList": links,
+                                                                          "color": elecItem.children[elecItem.children.length-1].basicE.color, "indexNumber": index});
+                                console.log("New view on electrode " + rows + "x" + columns + " added.")
                             }
 
                         }
-                        Electrode {
-                            id: electrode
-                            columnCount: columns
-                            rowCount: rows
-                            indexNumber: index
-                            linkList: links
+                        Item {
+                            id:elecItem
+                            height: electrode.height
+                            width: electrode.width
+                            property string color: "white"
+                            onColorChanged: {
+                                for (var i = 0; i < children.length; i++) {
+                                    children[i].color = color
+                                }
+                            }
+
+                            Electrode {
+                                id: electrode
+                                columnCount: columns
+                                rowCount: rows
+                                indexNumber: index
+                                linkList: links
+                            }
                         }
                     }
                 }
