@@ -25,6 +25,12 @@ ElectrodePlacementForm {
                           "maxSpikes": maxSpikes, "minSpikes": minSpikes} )
     }
 
+    resetZoomButton.onClicked:   {
+        imageArea.scale = 1
+        imageArea.x = 0
+        imageArea.y = 0
+    }
+
     statisticsButton.onClicked: {
         var i   = 0.1 * maxSpikes
         var ii  = 0.3 * maxSpikes

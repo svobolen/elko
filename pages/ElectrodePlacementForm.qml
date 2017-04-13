@@ -11,6 +11,7 @@ Controls.SplitView {
     property alias zoomSwitch: zoomSwitch
     property alias fixButton: fixButton
     property alias resetButton: resetButton
+    property alias resetZoomButton: resetZoomButton
     property alias comboBox: comboBox
     property alias exportButton: exportButton
     property alias electrodeRep: electrodeRep
@@ -19,10 +20,11 @@ Controls.SplitView {
     property alias statisticsButton: statisticsButton
     property alias scrollIndicator: scrollIndicator
     property alias column: column
+    property alias imageArea: imageArea
 
     property var name
-    property int zHighest: 1
-    property int currIndex: -1
+    property int zHighest: 2
+    property int currIndex: 1
     property bool zoomEnabled: false
     property var images: []
     property int minSpikes: 0
@@ -64,11 +66,8 @@ Controls.SplitView {
                 pinch.minimumScale: 1
                 pinch.maximumScale: 10
                 pinch.dragAxis: Pinch.XAndYAxis
-                onSmartZoom: imageArea.scale = pinch.scale
-                onPinchFinished: {
-                    imageArea.scale = 1
-                    imageArea.x = 0
-                    imageArea.y = 0
+                onSmartZoom: {
+                    imageArea.scale = pinch.scale
                 }
             }
         }
@@ -76,7 +75,8 @@ Controls.SplitView {
 
     Flickable {
         id: flickPart
-        Layout.minimumWidth: 100
+        Layout.minimumWidth: 1/4*electrodePlacement.width
+        Layout.maximumWidth: 1/4*electrodePlacement.width
         contentHeight: column.height
         contentWidth: 1/4*electrodePlacement.width
         boundsBehavior: Flickable.OvershootBounds
@@ -108,12 +108,27 @@ Controls.SplitView {
                     currentIndex: 2
                     displayText: "Display: " + currentText
                 }
-                Button {
-                    id: statisticsButton
-                    text: qsTr("Show spikes statistics")
+                Row {
+                    id: statisticsRow
+                    height: resetButton.height
+                    spacing: 5
+                    Button {
+                        id: statisticsButton
+                        text: qsTr("Show spikes statistics")
+                    }
+                    Button {
+                        id: exportButton
+                        text: qsTr("Export image")
+                        FileDialog {
+                            id: fileDialog
+                            folder: shortcuts.desktop
+                            selectExisting: false
+                            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+                        }
+                    }
                 }
                 Row {
-                    id: buttonsRow
+                    id: resetRow
                     height: resetButton.height
                     spacing: 5
                     Button {
@@ -121,14 +136,8 @@ Controls.SplitView {
                         text: qsTr("Reset")
                     }
                     Button {
-                        id: exportButton
-                        text: qsTr("Export image")
-                        FileDialog {
-                            id: fileDialog
-                            folder: shortcuts.documents
-                            selectExisting: false
-                            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
-                        }
+                        id: resetZoomButton
+                        text: qsTr("Reset zoom")
                     }
                 }
                 Item{
@@ -257,7 +266,7 @@ Controls.SplitView {
                                 var component = Qt.createComponent("qrc:/pages/Electrode.qml")
                                 var sameElec = component.createObject(elecItem, {"columnCount": columns, "rowCount": rows, "linkList": links,
                                                                           "color": elecItem.children[elecItem.children.length-1].basicE.color,
-                                                                          "indexNumber": index, "yPosition": elecItem.getYCoordinate(index)});
+                                                                          "yPosition": elecItem.getYCoordinate(index)});
                                 console.log("New view on electrode " + rows + "x" + columns + " added.")
                             }
                         }
@@ -286,7 +295,6 @@ Controls.SplitView {
                                 id: electrode
                                 columnCount: columns
                                 rowCount: rows
-                                indexNumber: index
                                 linkList: links
                                 yPosition: elecItem.getYCoordinate(index)
                             }
@@ -299,5 +307,11 @@ Controls.SplitView {
         //        ScrollIndicator.horizontal: ScrollIndicator { }
     }
 
-    onCurrIndexChanged: { electrodeRep.itemAt(currIndex).z = ++zHighest }
+    onCurrIndexChanged: {
+        //        electrodeRep.itemAt(currIndex).z = ++zHighest
+        if (currIndex !== 0) {
+            imageArea.children[currIndex].z = ++zHighest
+            console.log(currIndex + "   " + imageArea.children[currIndex].z)
+        }
+    }
 }

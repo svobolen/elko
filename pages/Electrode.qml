@@ -8,7 +8,7 @@ Item {
     property int rowCount
     property int size: 20
     property alias color: electrode.color
-    property int indexNumber
+    property int indexNumber: 1
     property bool draggable: true
     property bool flickable: true
     property alias basicE: electrode
@@ -48,7 +48,6 @@ Item {
 
             Drag.active: mouseArea.drag.active
 
-
             PinchArea {
                 enabled: draggable
                 anchors.fill: parent
@@ -73,7 +72,8 @@ Item {
                 }
                 MouseArea {
                     id: mouseArea
-                    property bool menuIsOpen: false
+                    property int tempX: 0
+                    property int tempY: 0
                     hoverEnabled: true
                     anchors.fill: parent
                     anchors.centerIn: parent
@@ -81,10 +81,12 @@ Item {
                     scrollGestureEnabled: false  // 2-finger-flick gesture should pass through to the Flickable
                     onPressAndHold: {
                         menu.open()
-                        menuIsOpen = true
                     }
                     onPressed: {
-                        electrodePlacement.currIndex = root.indexNumber
+                        electrodePlacement.currIndex = indexNumber - 1
+                        tempX = electrode.x
+                        tempY = electrode.y
+                        console.log(currIndex)
                     }
                     onWheel: {
                         if (draggable) {
@@ -102,23 +104,22 @@ Item {
                         }
                     }
                     onReleased: {
-                        if(draggable) {
-                            if (!menuIsOpen) {
+                        if (tempX !== electrode.x || tempY !== electrode.y) {
                                 var previousParent = electrode.parent
                                 electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
 
                                 if (previousParent == root & electrode.parent != root ) {
                                     electrode.x = electrode.x + electrode.parent.width + electrodePlacement.electrodeRep.itemAt(root.indexNumber).elec.x
+                                            + electrodePlacement.column.padding
                                     electrode.y = electrode.y + root.yPosition - electrodePlacement.column.height*electrodePlacement.scrollIndicator.position
+                                    indexNumber = electrodePlacement.imageArea.children.length
+                                    electrodePlacement.currIndex = indexNumber - 1
                                 } else if (electrode.parent == root){
                                     electrode.x = 0
                                     electrode.y = 0
                                     electrode.scale = 1
                                     electrode.rotation = 0
                                 } //else nothing (just moving with mouse)
-                            } else {
-                                menuIsOpen = false
-                            }
                         }
                     }
                     Menu {
