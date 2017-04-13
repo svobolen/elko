@@ -100,7 +100,6 @@ Item {
                                 for (var i = 0; i < linkedTracks.count; i++) {
                                     if (linkedTracks.get(i).electrodeNumber === defaultName) {
                                         linkedTracks.get(i).spikes = spikes
-//                                        console.log(name + " " + defaultName + " "+ spikes)
                                     }
                                 }
                             }

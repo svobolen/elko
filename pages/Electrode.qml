@@ -14,6 +14,7 @@ Item {
     property alias basicE: electrode
     property alias mouseArea: mouseArea
     property ListModel linkList
+    property int yPosition: 0
 
     width: columnCount*size; height: rowCount*size;
 
@@ -38,12 +39,14 @@ Item {
             size: root.size
             droppingEnabled: false
             linkedTracks: linkList
+            parent: root
 
             Behavior on scale { NumberAnimation { duration: 200 } }
-            Behavior on x { NumberAnimation { duration: 200 } }
-            Behavior on y { NumberAnimation { duration: 200 } }
+            Behavior on x { NumberAnimation { duration: 0 } }
+            Behavior on y { NumberAnimation { duration: 0 } }
 
             Drag.active: mouseArea.drag.active
+
 
             PinchArea {
                 enabled: draggable
@@ -74,9 +77,12 @@ Item {
                     anchors.centerIn: parent
                     drag.target: electrode
                     scrollGestureEnabled: false  // 2-finger-flick gesture should pass through to the Flickable
-                    property var previousParent: root
-                    onPressAndHold: menu.open()
-                    onPressed: { electrodePlacement.currIndex = root.indexNumber }
+                    onPressAndHold: {
+                        menu.open()
+                    }
+                    onPressed: {
+                        electrodePlacement.currIndex = root.indexNumber
+                    }
                     onWheel: {
                         if (draggable) {
                             if (wheel.modifiers & Qt.ControlModifier) {
@@ -93,23 +99,17 @@ Item {
                         }
                     }
                     onReleased: {
+                        var previousParent = electrode.parent
+                        electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
 
-                        //                        electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
-                        //                        console.log("po " + electrode.parent)
-
-                        //                        if(previousParent === root && electrode.parent !== root) {
-                        //                            console.log("tady")
-                        //                            electrode.x = electrode.x + electrode.parent.width
-                        //                            electrode.y = electrode.y + root.y + 250
-                        //                        } else if (electrode.parent === root){
-                        //                            electrode.rotation = 0
-                        //                            electrode.scale = 1
-                        //                            electrode.x = 0
-                        //                            electrode.y = 0
-                        //                        }
-                        //                        console.log(electrode.parent)
-                        //                        console.log(electrode.x)
-                        //                        console.log(electrode.y)
+                        if (previousParent == root & electrode.parent != root ) {
+                            electrode.x = electrode.x + electrode.parent.width + electrodePlacement.electrodeRep.itemAt(root.indexNumber).elec.x
+                            electrode.y = electrode.y + root.yPosition - electrodePlacement.column.height*electrodePlacement.scrollIndicator.position
+                        } else if (electrode.parent == root){
+                            electrode.x = 0
+                            electrode.y = 0
+                            electrode.scale = 1
+                        } //else nothing (just moving with mouse)
                     }
                     Menu {
                         id: menu

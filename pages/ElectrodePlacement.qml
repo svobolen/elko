@@ -21,7 +21,8 @@ ElectrodePlacementForm {
     }
 
     resetButton.onClicked: {
-        stackView.replace("qrc:/pages/ElectrodePlacement.qml", {"electrodes": electrodes, "images": window.images,"name": "Electrode Placement"} )
+        stackView.replace("qrc:/pages/ElectrodePlacement.qml", {"electrodes": electrodes, "images": window.images,"name": "Electrode Placement",
+                          "maxSpikes": maxSpikes, "minSpikes": minSpikes} )
     }
 
     statisticsButton.onClicked: {

@@ -28,7 +28,7 @@ Image {
     FileDialog {
         id: fileDialog
         nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
-        folder: shortcuts.documents
+        folder: shortcuts.pictures
     }
 
     Popup {

@@ -17,6 +17,8 @@ Controls.SplitView {
     property alias fileDialog: fileDialog
     property alias electrodePlacement: electrodePlacement
     property alias statisticsButton: statisticsButton
+    property alias scrollIndicator: scrollIndicator
+    property alias column: column
 
     property var name
     property int zHighest: 1
@@ -28,7 +30,7 @@ Controls.SplitView {
     property ListModel electrodes: ListModel {}
     orientation: Qt.Horizontal
 
-    Item {
+    DropArea {
         id: imageArea
         width: 3/4*parent.width
         height: parent.height
@@ -40,16 +42,18 @@ Controls.SplitView {
 
             Grid {
                 id: imagesGrid
-                rows: images == null ? 0 : Math.round(images.length/2)
-                spacing: 10
+                columns: images == null ? 0 : (images.length == 2 ? 2 : Math.round(images.length/2))
+                rows: images == null ? 0 : ((images.length == 1 || images.length == 2)  ? 1 : 2)
+                spacing: 5
                 padding: 5
                 Repeater {
                     model: images
                     Image {
                         source: modelData
                         fillMode: Image.PreserveAspectFit
-                        width: (imagesGrid.rows == 1 && images.length !== 1) ? (imageArea.width-20)/(imagesGrid.rows+1) : imageArea.width/imagesGrid.rows
-                        height: (imageArea.height-20)/imagesGrid.rows
+                        width: (imageArea.width-imagesGrid.spacing*(imagesGrid.columns+1))/imagesGrid.columns
+                        height: (imageArea.height-imagesGrid.spacing*(imagesGrid.rows+1))/imagesGrid.rows
+                        verticalAlignment: (index % 2 == 1) ? Image.AlignBottom : Image.AlignTop
                     }
                 }
             }
@@ -71,15 +75,16 @@ Controls.SplitView {
     }
 
     Flickable {
+        id: flickPart
         Layout.minimumWidth: 100
         contentHeight: column.height
-        contentWidth: column.width
+        contentWidth: 1/4*electrodePlacement.width
         boundsBehavior: Flickable.OvershootBounds
 
         Rectangle {
             id: rect
             width: 1/4*electrodePlacement.width
-            height: electrodePlacement.height
+            height: column.height
             Layout.minimumWidth: 100
             color: "white"
             Column {
@@ -140,7 +145,6 @@ Controls.SplitView {
                         text: "1"
                     }
                 }
-
                 Item {
                     height: 20
                     width: 250
@@ -202,26 +206,33 @@ Controls.SplitView {
                         text: maxSpikes
                     }
                 }
-                Button {
-                    id: resetButton
-                    text: qsTr("Reset")
-                }
-                Button {
-                    id: exportButton
-                    text: qsTr("Export image")
-                    FileDialog {
-                        id: fileDialog
-                        folder: shortcuts.documents
-                        selectExisting: false
-                        nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+                Row {
+                    id: buttonsRow
+                    height: resetButton.height
+                    spacing: 5
+                    Button {
+                        id: resetButton
+                        text: qsTr("Reset")
+                    }
+                    Button {
+                        id: exportButton
+                        text: qsTr("Export image")
+                        FileDialog {
+                            id: fileDialog
+                            folder: shortcuts.documents
+                            selectExisting: false
+                            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+                        }
                     }
                 }
                 Repeater {
                     id: electrodeRep
+
                     model: electrodes
                     delegate: Row {
                         id: elRow
                         property alias elec: elecItem
+                        property int indexNum: index
                         padding: 5
                         spacing: 5
 
@@ -244,10 +255,10 @@ Controls.SplitView {
                             onClicked: {
                                 var component = Qt.createComponent("qrc:/pages/Electrode.qml")
                                 var sameElec = component.createObject(elecItem, {"columnCount": columns, "rowCount": rows, "linkList": links,
-                                                                          "color": elecItem.children[elecItem.children.length-1].basicE.color, "indexNumber": index});
+                                                                          "color": elecItem.children[elecItem.children.length-1].basicE.color,
+                                                                          "indexNumber": index, "yPosition": elecItem.getYCoordinate(index)});
                                 console.log("New view on electrode " + rows + "x" + columns + " added.")
                             }
-
                         }
                         Item {
                             id:elecItem
@@ -259,6 +270,16 @@ Controls.SplitView {
                                     children[i].color = color
                                 }
                             }
+                            function getYCoordinate(index) {
+                                var temp = buttonsRow.y + buttonsRow.height + column.spacing + column.padding
+                                if (index === 0) {
+                                    return temp
+                                }
+                                for(var i = 1; i <= index; i++) {
+                                    temp = temp + electrodeRep.itemAt(i-1).height + column.spacing
+                                }
+                                return temp
+                            }
 
                             Electrode {
                                 id: electrode
@@ -266,15 +287,15 @@ Controls.SplitView {
                                 rowCount: rows
                                 indexNumber: index
                                 linkList: links
+                                yPosition: elecItem.getYCoordinate(index)
                             }
                         }
                     }
                 }
             }
-
         }
-        ScrollIndicator.vertical: ScrollIndicator { }
-        ScrollIndicator.horizontal: ScrollIndicator { }
+        ScrollIndicator.vertical: ScrollIndicator { id: scrollIndicator }
+        //        ScrollIndicator.horizontal: ScrollIndicator { }
     }
 
     onCurrIndexChanged: { electrodeRep.itemAt(currIndex).z = ++zHighest }
