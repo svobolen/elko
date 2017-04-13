@@ -23,8 +23,8 @@ Controls.SplitView {
 
         Item {
             id: destItem
-            width: destination.width * 1.1
-            height: destination.height * 1.2
+            width: destination.width + 150
+            height: destination.height + 300
 
             Column {
                 id: destination
@@ -77,8 +77,8 @@ Controls.SplitView {
 
             Item {
                 id: sourceItem
-                width: source.width * 1.1
-                height: source.height * 1.1
+                width: source.width
+                height: source.height + 150
                 Column {
                     id: source
                     width: 50

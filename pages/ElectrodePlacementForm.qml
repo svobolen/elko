@@ -45,7 +45,7 @@ Controls.SplitView {
                 columns: images == null ? 0 : (images.length == 2 ? 2 : Math.round(images.length/2))
                 rows: images == null ? 0 : ((images.length == 1 || images.length == 2)  ? 1 : 2)
                 spacing: 5
-                padding: 5
+                padding: 10
                 Repeater {
                     model: images
                     Image {
@@ -84,7 +84,7 @@ Controls.SplitView {
         Rectangle {
             id: rect
             width: 1/4*electrodePlacement.width
-            height: column.height
+            height: Math.max(column.height, electrodePlacement.height)
             Layout.minimumWidth: 100
             color: "white"
             Column {
@@ -111,6 +111,25 @@ Controls.SplitView {
                 Button {
                     id: statisticsButton
                     text: qsTr("Show spikes statistics")
+                }
+                Row {
+                    id: buttonsRow
+                    height: resetButton.height
+                    spacing: 5
+                    Button {
+                        id: resetButton
+                        text: qsTr("Reset")
+                    }
+                    Button {
+                        id: exportButton
+                        text: qsTr("Export image")
+                        FileDialog {
+                            id: fileDialog
+                            folder: shortcuts.documents
+                            selectExisting: false
+                            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+                        }
+                    }
                 }
                 Item{
                     id: percentageGradLabels
@@ -146,6 +165,7 @@ Controls.SplitView {
                     }
                 }
                 Item {
+                    id: gradient
                     height: 20
                     width: 250
                     Label {
@@ -206,25 +226,6 @@ Controls.SplitView {
                         text: maxSpikes
                     }
                 }
-                Row {
-                    id: buttonsRow
-                    height: resetButton.height
-                    spacing: 5
-                    Button {
-                        id: resetButton
-                        text: qsTr("Reset")
-                    }
-                    Button {
-                        id: exportButton
-                        text: qsTr("Export image")
-                        FileDialog {
-                            id: fileDialog
-                            folder: shortcuts.documents
-                            selectExisting: false
-                            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
-                        }
-                    }
-                }
                 Repeater {
                     id: electrodeRep
 
@@ -271,7 +272,7 @@ Controls.SplitView {
                                 }
                             }
                             function getYCoordinate(index) {
-                                var temp = buttonsRow.y + buttonsRow.height + column.spacing + column.padding
+                                var temp = gradientLabels.y + gradientLabels.height + column.spacing + column.padding
                                 if (index === 0) {
                                     return temp
                                 }

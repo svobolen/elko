@@ -35,8 +35,8 @@ Page {
 
             Item {
                 id: stripTab
-                width: stripColumn.width * 1.1
-                height: stripColumn.height * 1.1
+                width: stripColumn.width + 150
+                height: stripColumn.height + 150
                 Column {
                     id: stripColumn
                     spacing: 10
@@ -91,8 +91,8 @@ Page {
 
             Item {
                 id: gridTab
-                width: gridColumn.width * 1.1
-                height: gridColumn.height * 1.1
+                width: gridColumn.width + 150
+                height: gridColumn.height + 150
 
                 Column {
                     id: gridColumn
@@ -142,27 +142,26 @@ Page {
             ScrollIndicator.horizontal: ScrollIndicator { }
         }
     }
-
-    Button {
-        id: addButton
-        text: qsTr("Add new type of strip or grid")
-        x: (parent.width - width) / 2
-        anchors.bottom: parent.bottom
-        anchors.right: confirmButton.left
-        anchors.margins: 15
-    }
     Button {
         id: confirmButton
         text: qsTr("Confirm")
+        x: (parent.width - width) / 2
         anchors.bottom: parent.bottom
-        anchors.left: addButton.right
+        anchors.right: addButton.left
+        anchors.margins: 15
+    }
+    Button {
+        id: addButton
+        text: qsTr("Add new type of strip or grid")
+        anchors.bottom: parent.bottom
+        anchors.left: confirmButton.right
         anchors.margins: 15
     }
     Button {
         id: resetButton
         text: qsTr("Reset choice")
         anchors.bottom: parent.bottom
-        anchors.left: confirmButton.right
+        anchors.left: addButton.right
         anchors.margins: 15
     }
 }

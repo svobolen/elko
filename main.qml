@@ -126,6 +126,7 @@ ApplicationWindow {
                 ListElement { title: "Electrode Manager"; source: "qrc:/pages/ElectrodeManager.qml" }
                 ListElement { title: "Link Signal with Electrode"; source: "qrc:/pages/ElectrodeSignalLink.qml"}
                 ListElement { title: "Electrode Placement"; source: "qrc:/pages/ElectrodePlacement.qml" }
+                ListElement { title: "Alenka"; source: "qrc:/pages/Alenka.qml" }
             }
         }
 
@@ -172,7 +173,7 @@ ApplicationWindow {
         focus: true
         x: (window.width - width) / 2
         y: window.height / 6
-        width: Math.min(window.width, window.height) / 3
+        width: Math.min(window.width, window.height) * 3 / 7
         height: aboutColumn.implicitHeight + topPadding + bottomPadding
 
         Column {

@@ -35,5 +35,6 @@
         <file>main.cpp</file>
         <file>main.h</file>
         <file>pages/DragTrackForm.qml</file>
+        <file>pages/Alenka.qml</file>
     </qresource>
 </RCC>
