@@ -1,12 +1,11 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.0
-import QtQuick.Dialogs 1.2
 
 Image {
+    id: brainImage
 
     property string sourceImg
     property bool checkboxVisible: false
-
     readonly property string plusImgSource: "qrc:/images/plus.png"
 
     property alias info: info
@@ -17,19 +16,11 @@ Image {
     property alias changeMenu: changeMenu
     property alias deleteMenu: deleteMenu
     property alias brainImage: brainImage
-    property alias fileDialog: fileDialog
 
-    id: brainImage
     source: sourceImg
     fillMode: Image.PreserveAspectFit
     width: parent.width/2
     height: parent.height/2
-
-    FileDialog {
-        id: fileDialog
-        nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
-        folder: shortcuts.pictures
-    }
 
     Popup {
         id: info
@@ -40,7 +31,7 @@ Image {
         Column {
             spacing: 10
             Label { text: qsTr("<b>Information</b>") }
-            Label { text: qsTr("Please choose a image file (*.jpg, *.png)") }
+            Label { text: qsTr("Please choose a image file (*.jpg *.png *.bmp)") }
             Button {
                 text: qsTr("OK")
                 onClicked: { info.close() }
@@ -91,5 +82,4 @@ Image {
             }
         }
     }
-
 }

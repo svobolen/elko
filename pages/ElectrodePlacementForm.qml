@@ -2,7 +2,6 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4 as Controls
 import QtQuick.Controls 2.0
-import QtQuick.Dialogs 1.2
 
 
 Controls.SplitView {
@@ -15,7 +14,6 @@ Controls.SplitView {
     property alias comboBox: comboBox
     property alias exportButton: exportButton
     property alias electrodeRep: electrodeRep
-    property alias fileDialog: fileDialog
     property alias electrodePlacement: electrodePlacement
     property alias statisticsButton: statisticsButton
     property alias scrollIndicator: scrollIndicator
@@ -73,6 +71,9 @@ Controls.SplitView {
         }
     }
 
+    Component.onCompleted: console.log(electrodes.count)
+
+
     Flickable {
         id: flickPart
         Layout.minimumWidth: 1/4*electrodePlacement.width
@@ -87,6 +88,7 @@ Controls.SplitView {
             height: Math.max(column.height, electrodePlacement.height)
             Layout.minimumWidth: 100
             color: "white"
+
             Column {
                 id: column
                 spacing: 10
@@ -97,17 +99,20 @@ Controls.SplitView {
                     text: qsTr("Image zoom")
                     checked: false
                 }
+
                 Switch {
                     id: fixButton
                     text: qsTr("Fix positions")
                     checked: false
                 }
+
                 ComboBox {
                     id: comboBox
                     model: ["indexes", "track names", "indexes + tracks"]
                     currentIndex: 2
                     displayText: "Display: " + currentText
                 }
+
                 Row {
                     id: statisticsRow
                     height: resetButton.height
@@ -119,14 +124,9 @@ Controls.SplitView {
                     Button {
                         id: exportButton
                         text: qsTr("Export image")
-                        FileDialog {
-                            id: fileDialog
-                            folder: shortcuts.desktop
-                            selectExisting: false
-                            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
-                        }
                     }
                 }
+
                 Row {
                     id: resetRow
                     height: resetButton.height
@@ -140,6 +140,7 @@ Controls.SplitView {
                         text: qsTr("Reset zoom")
                     }
                 }
+
                 Item{
                     id: percentageGradLabels
                     height: 12
@@ -173,6 +174,7 @@ Controls.SplitView {
                         text: "1"
                     }
                 }
+
                 Item {
                     id: gradient
                     height: 20
@@ -202,6 +204,7 @@ Controls.SplitView {
                         text: qsTr("max")
                     }
                 }
+
                 Item{
                     id: gradientLabels
                     height: 20
@@ -235,6 +238,7 @@ Controls.SplitView {
                         text: maxSpikes
                     }
                 }
+
                 Repeater {
                     id: electrodeRep
 
@@ -304,14 +308,10 @@ Controls.SplitView {
             }
         }
         ScrollIndicator.vertical: ScrollIndicator { id: scrollIndicator }
-        //        ScrollIndicator.horizontal: ScrollIndicator { }
     }
-
     onCurrIndexChanged: {
-        //        electrodeRep.itemAt(currIndex).z = ++zHighest
         if (currIndex !== 0) {
             imageArea.children[currIndex].z = ++zHighest
-            console.log(currIndex + "   " + imageArea.children[currIndex].z)
         }
     }
 }

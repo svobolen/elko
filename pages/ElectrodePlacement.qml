@@ -1,28 +1,16 @@
 import QtQuick 2.7
+import QtQuick.Dialogs 1.2
+
 
 ElectrodePlacementForm {
 
     exportButton.onClicked: {
-        fileDialog.open()
-    }
-
-    fileDialog.onAccepted: {
-        var filePath = ( fileDialog.fileUrl + "").replace('file:///', '');
-        electrodePlacement.grabToImage(function(result) {
-            if (!result.saveToFile(filePath)){
-                console.error('Unknown error saving to ',filePath);
-            }
-        });
-        console.log("Screenshot has been saved to " + filePath)
-    }
-
-    fileDialog.onRejected: {
-        console.log("Saving file canceled.")
+        loader.sourceComponent = fileComp
     }
 
     resetButton.onClicked: {
         stackView.replace("qrc:/pages/ElectrodePlacement.qml", {"electrodes": electrodes, "images": window.images,"name": "Electrode Placement",
-                          "maxSpikes": maxSpikes, "minSpikes": minSpikes} )
+                              "maxSpikes": maxSpikes, "minSpikes": minSpikes} )
     }
 
     resetZoomButton.onClicked:   {
@@ -112,5 +100,35 @@ ElectrodePlacementForm {
                 }
             }
         }
+    }
+
+    Component {
+        id: fileComp
+
+        FileDialog {
+            id: fileDialog
+            folder: shortcuts.desktop
+            selectExisting: false
+            nameFilters: [ "JPEG Image (*.jpg)", "PNG Image (*.png)", "Bitmap Image (*.bmp)", "All files (*)" ]
+            onAccepted: {
+                var filePath = ( fileDialog.fileUrl + "").replace('file:///', '');
+                electrodePlacement.grabToImage(function(result) {
+                    if (!result.saveToFile(filePath)){
+                        console.error('Unknown error saving to ',filePath);
+                    }
+                });
+                console.log("Screenshot has been saved to " + filePath)
+                loader.sourceComponent = undefined
+            }
+            onRejected: {
+                loader.sourceComponent = undefined
+                console.log("Saving file canceled.")
+            }
+            Component.onCompleted: open()
+        }
+    }
+
+    Loader {
+        id: loader
     }
 }

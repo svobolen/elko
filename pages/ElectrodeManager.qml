@@ -6,6 +6,7 @@ ElectrodeManagerForm {
     confirmButton.onClicked: {
         var chosenElecs = getChosenElectrodes()
         if (chosenElecs.count === 0) {
+            infoPopup.open()
             console.log("User did not choose any electrode.")
         } else {
             listView.currentIndex = 2   //index v listview
@@ -13,14 +14,12 @@ ElectrodeManagerForm {
             stackView.push( "qrc:/pages/ElectrodeSignalLink.qml", {"electrodes": chosenElecs, "name": "Link Signal with Electrode"} )
         }
     }
+
     addButton.onClicked: {
         addDialog.open()
     }
-    resetButton.onClicked: {
-        resetChoice()
-    }
 
-    function resetChoice() {
+    resetButton.onClicked: {
         // reset strips choice
         for (var i = 0; i < stripRepeater.count; i++) {
             stripRepeater.itemAt(i).count = 0
@@ -29,6 +28,7 @@ ElectrodeManagerForm {
         for (var j = 0; j < gridRepeater.count; j++) {
             gridRepeater.itemAt(j).count = 0
         }
+        console.log("Choice of electrodes has been reset.")
     }
 
     function getChosenElectrodes() {
@@ -53,12 +53,6 @@ ElectrodeManagerForm {
         }
         return chosenElectrodesList
     }
-
-    ListModel {
-        id: chosenElectrodesList
-        //        ListElement { columns: 0; rows: 0}
-    }
-    ElectrodeAddingDialog {id: addDialog}
 }
 
 

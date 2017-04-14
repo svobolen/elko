@@ -1,22 +1,23 @@
-import QtQuick 2.4
+import QtQuick 2.7
+import QtQuick.Dialogs 1.2
+
 
 BrainForm {
 
     mouseArea.onClicked: {
         if (brainImage.source == plusImgSource) {
-            fileDialog.open()
+            loader.sourceComponent = fileComp
         } else {
             checkbox.checked = !checkbox.checked
         }
     }
-
 
     mouseArea.onPressAndHold: {
         menu.open()
     }
 
     changeMenu.onTriggered: {
-        fileDialog.open()
+        loader.sourceComponent = fileComp
     }
 
     deleteMenu.onTriggered: {
@@ -29,24 +30,12 @@ BrainForm {
     checkbox.onCheckStateChanged:  {
         brainImage.opacity = checkbox.checked ? 0.5 : 1
     }
-    fileDialog.onAccepted: {
-        var path = fileDialog.fileUrl
-        if (checkIfImage(path.toString())) {
-            addImage(path)
-        } else {
-            console.log("Chosen file is not an image.")
-            info.open()
-        }
-    }
-
-    fileDialog.onRejected: {
-        console.log("Choosing file canceled.")
-    }
 
     function checkIfImage(source) {
         var fileExtension = source.substring(source.length-4,source.length).toLowerCase()
-        return ( (fileExtension === (".jpg")) || (fileExtension === ".png") )
+        return ( (fileExtension === (".jpg")) || (fileExtension === ".png") || (fileExtension === ".bmp"))
     }
+
     function addImage(source) {
         brainImage.source = source
         sourceImg = source
@@ -55,4 +44,29 @@ BrainForm {
         console.log("You chose: " + source)
     }
 
+    Component {
+        id: fileComp
+        FileDialog {
+            id: fileDialog
+            nameFilters: [ "Image files (*.jpg *.png *.bmp)", "All files (*)" ]
+            folder: shortcuts.pictures
+            onAccepted: {
+                var path = fileDialog.fileUrl
+                if (checkIfImage(path.toString())) {
+                    addImage(path)
+                } else {
+                    console.log("Chosen file is not an image.")
+                    info.open()
+                }
+                loader.sourceComponent = undefined
+            }
+            onRejected: {
+                loader.sourceComponent = undefined
+                console.log("Choosing file canceled.")
+            }
+            Component.onCompleted: open()
+        }
+    }
+
+    Loader {id: loader }
 }

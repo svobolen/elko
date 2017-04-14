@@ -1,11 +1,15 @@
 import QtQuick 2.7
 
 ElectrodeAddingDialogForm {
+
     okButton.onClicked: {
         addElectrode(columnSpinBox.value, rowSpinBox.value)
         addDialog.close()
     }
-    cancelButton.onClicked: addDialog.close()
+
+    cancelButton.onClicked: {
+        addDialog.close()
+    }
 
     function addElectrode(columnCount, rowCount) {
 

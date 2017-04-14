@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 import QtQuick.Dialogs 1.2
+import "./pages" as Pages
 
 
 ApplicationWindow {
@@ -223,19 +224,38 @@ ApplicationWindow {
 
     FileDialog {
         id: openDialog
+
+        property ListModel electrodeList: ListModel {}
+
         nameFilters: [ "", "All files (*)" ]
         folder: shortcuts.documents
         onAccepted: {
-            //            var path = fileDialog.fileUrl
-            //            if (fileDialog.checkIfImage(path.toString())) {
-            //                fileDialog.addImage(path)
-            //            } else {
-            //                console.log("Chosen file is not an image.")
-            //                info.open()
-            //            }
+            var path = openDialog.fileUrl
+            openSessionPage.sourcePath = "qrc:/xmls/session.xml"
+            listView.currentIndex = 3   //index v listview
+            titleLabel.text = "Electrode Placement"
+
+            var sourceArray = []
+            for (var k = 0; k < openSessionPage.imageModel.count; k++) {
+                sourceArray.push(openSessionPage.imageModel.get(k).source)
+            }
+
+            for (var l = 0; l < openSessionPage.electrodesModel.count; l++) {
+                electrodeList.append({rows: openSessionPage.electrodesModel.get(l).rows,
+                                         columns: openSessionPage.electrodesModel.get(l).columns,
+                                            links: null})
+            }
+
+            stackView.push( "qrc:/pages/ElectrodePlacement.qml", {"electrodes": electrodeList, "images": sourceArray,
+                               "name": "Electrode Placement", "minSpikes": 0, "maxSpikes": 97} )
         }
         onRejected: console.log("Choosing file canceled.")
     }
+    Pages.OpenSession {
+        id: openSessionPage
+    }
+
+
 
     function changePage(title, source, indexNum) {
         if (listView.currentIndex !== indexNum) {
@@ -250,11 +270,8 @@ ApplicationWindow {
             } else {
                 stackView.push(stackItem)
             }
-
-//            for (var i = 0; i < stackView.depth; i++) {
-//                console.log(i + " " + stackView.get(i).name)
-//            }
-//            console.log("")
         }
     }
+
+
 }

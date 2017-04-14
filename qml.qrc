@@ -36,5 +36,7 @@
         <file>main.h</file>
         <file>pages/DragTrackForm.qml</file>
         <file>pages/Alenka.qml</file>
+        <file>xmls/session.xml</file>
+        <file>pages/OpenSession.qml</file>
     </qresource>
 </RCC>

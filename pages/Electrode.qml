@@ -84,9 +84,8 @@ Item {
                     }
                     onPressed: {
                         electrodePlacement.currIndex = indexNumber - 1
-                        tempX = electrode.x
-                        tempY = electrode.y
-                        console.log(currIndex)
+                        tempX = Math.round(electrode.x)
+                        tempY = Math.round(electrode.y)
                     }
                     onWheel: {
                         if (draggable) {
@@ -104,14 +103,19 @@ Item {
                         }
                     }
                     onReleased: {
-                        if (tempX !== electrode.x || tempY !== electrode.y) {
+                        if (tempX !== Math.round(electrode.x) || tempY !== Math.round(electrode.y)) {
                                 var previousParent = electrode.parent
                                 electrode.parent = (electrode.Drag.target === null) ?  root : electrode.Drag.target
 
                                 if (previousParent == root & electrode.parent != root ) {
-                                    electrode.x = electrode.x + electrode.parent.width + electrodePlacement.electrodeRep.itemAt(root.indexNumber).elec.x
+                                    electrode.x = electrode.x + electrode.parent.width
+                                            + electrodePlacement.electrodeRep.itemAt(root.indexNumber).elec.x
                                             + electrodePlacement.column.padding
-                                    electrode.y = electrode.y + root.yPosition - electrodePlacement.column.height*electrodePlacement.scrollIndicator.position
+                                            - electrodePlacement.imageArea.x / electrodePlacement.imageArea.scale
+                                    electrode.y = electrode.y + root.yPosition
+                                            - electrodePlacement.column.height * electrodePlacement.scrollIndicator.position
+                                            - electrodePlacement.imageArea.y / electrodePlacement.imageArea.scale
+                                    electrode.scale = electrode.scale / electrodePlacement.imageArea.scale
                                     indexNumber = electrodePlacement.imageArea.children.length
                                     electrodePlacement.currIndex = indexNumber - 1
                                 } else if (electrode.parent == root){

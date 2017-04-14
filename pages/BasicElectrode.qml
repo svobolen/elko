@@ -8,7 +8,7 @@ Item {
     property int size: 20
     property bool droppingEnabled: false
     property string color: "white"
-    property ListModel linkedTracks: ListModel { }  //ListElement {electrodeNumber: defaultName, wave: trackName}
+    property ListModel linkedTracks: ListModel { }  //ListElement {electrodeNumber: defaultName, wave: name, spikes: 0})
 
     property alias rowRep: rowRep
 

@@ -3,30 +3,30 @@ import QtQuick 2.7
 
 ElectrodeSignalLinkForm {
 
+    ListModel { id: linkedElectrodesList } //ListElement { rows: rowCount, columns: columnCount, links: links}
+
     confirmButton.onClicked: {
         readXml()
         fillLinkedElectrodesList()
         listView.currentIndex = 3   //index v listview
         titleLabel.text = "Electrode Placement"
         stackView.push( "qrc:/pages/ElectrodePlacement.qml", {"electrodes": linkedElectrodesList, "images": window.images,"name": "Electrode Placement",
-                       "minSpikes": minSpikes, "maxSpikes": maxSpikes} )
+                           "minSpikes": minSpikes, "maxSpikes": maxSpikes} )
     }
-
-    ListModel { id: linkedElectrodesList } //ListElement { rows: rowCount, columns: columnCount, links: links}
 
     function fillLinkedElectrodesList() {
         linkedElectrodesList.clear()
-
         for (var i = 0; i < elecRep.count; i++) {
-            linkedElectrodesList.append({ rows: elecRep.itemAt(i).bElectrode.rowCount,
-                                            columns: elecRep.itemAt(i).bElectrode.columnCount,
+            linkedElectrodesList.append({ rows: elecRep.itemAt(i).bElectrode.rowCount, columns: elecRep.itemAt(i).bElectrode.columnCount,
                                             links: elecRep.itemAt(i).bElectrode.linkedTracks})
         }
         return linkedElectrodesList
     }
 
     function readXml() {
-        var spikes, min, max = 0
+        var spikes = 0
+        var min = 0
+        var max = 0
 
         for (var i = 0; i < xmlModels.trackModel.count; i++) {
             spikes = 0
@@ -36,9 +36,12 @@ ElectrodeSignalLinkForm {
                     spikes++
                 }
             }
-            if (i === 0) { min = spikes }
-            if (spikes < min) { min = spikes }
-            if (spikes > max) { max = spikes }
+            console.log("spikes " + spikes + " min " + min + " max " + max)
+            if (spikes > max){
+                max = spikes
+            } else if (spikes <= min) {
+                min = spikes
+            }
 
             dragRep.itemAt(i).spikes = spikes
             console.log(xmlModels.trackModel.get(i).label.replace(/\s+/g, '') + " (" + i + ") has " + spikes + " spike(s).")

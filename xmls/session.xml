@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<document>
+<electrodePlacement minSpikes="0" maxSpikes="97">
+	<images>
+ 		<image source="qrc:/images/brains/brain1.png"></image>
+		<image source="qrc:/images/brains/brain3.png"></image>
+                <image source="qrc:/images/brains/brain2.jpg"></image>
+	</images>
+        <electrodes>
+                <electrode rows="1" columns="5"></electrode>
+                <electrode rows="1" columns="8"></electrode>
+                <electrode rows="2" columns="3"></electrode>
+                <electrode rows="3" columns="6"></electrode>
+                <electrode rows="5" columns="4"></electrode>
+        </electrodes>
+        <links>
+            <link wave="C3" electrodeNumber="1" spikes="10" id="1"></link>
+            <link wave="F3" electrodeNumber="2" spikes="90" id="2"></link>
+            <link wave="FP1" electrodeNumber="3"  spikes="30" id="1"></link>
+        </links>
+</electrodePlacement>
+</document>

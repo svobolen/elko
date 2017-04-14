@@ -15,6 +15,9 @@ Page {
     property alias stripModel: stripModel
     property alias gridModel: gridModel
     property alias tabBar: bar
+    property alias infoPopup: infoPopup
+    property alias addDialog: addDialog
+    property ListModel chosenElectrodesList: ListModel {} //ListElement { columns: 0; rows: 0}
 
     footer: TabBar {
         id: bar
@@ -64,6 +67,7 @@ Page {
                                 id: stripSpin
                                 value: 0
                                 anchors.verticalCenter: parent.verticalCenter
+                                editable: true
                             }
                             Label {
                                 text: strip.rowCount + "x" + strip.columnCount
@@ -122,6 +126,7 @@ Page {
                                 id: gridSpin
                                 value: 0
                                 anchors.verticalCenter: parent.verticalCenter
+                                editable: true
                             }
                             Label {
                                 text: grid.rowCount + "x" + grid.columnCount
@@ -142,6 +147,7 @@ Page {
             ScrollIndicator.horizontal: ScrollIndicator { }
         }
     }
+
     Button {
         id: confirmButton
         text: qsTr("Confirm")
@@ -150,6 +156,7 @@ Page {
         anchors.right: addButton.left
         anchors.margins: 15
     }
+
     Button {
         id: addButton
         text: qsTr("Add new type of strip or grid")
@@ -157,11 +164,37 @@ Page {
         anchors.left: confirmButton.right
         anchors.margins: 15
     }
+
     Button {
         id: resetButton
         text: qsTr("Reset choice")
         anchors.bottom: parent.bottom
         anchors.left: addButton.right
         anchors.margins: 15
+    }
+
+    Popup {
+        id: infoPopup
+        modal: true
+        focus: true
+        x: (window.width - width) / 2
+        y: (window.height - height) / 6
+        Column{
+            spacing: 10
+            Label {
+                text: qsTr("<b>Information</b>")
+            }
+            Label {
+                text: qsTr("You didn't choose any electrode.")
+            }
+            Button {
+                text: qsTr("OK")
+                onClicked: { info.close() }
+            }
+        }
+    }
+
+    ElectrodeAddingDialog {
+        id: addDialog
     }
 }

@@ -71,7 +71,7 @@ Pane {
                 wrapMode: Label.Wrap
             }
             Grid {
-                id: grid2
+                id: imageGrid
                 columns: 2
                 rows: 2
                 spacing: 10
@@ -95,9 +95,9 @@ Pane {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
-                    swipe.addItem(newPage.createObject(swipe, {"imageModel": pluses}))
+                    swipe.insertItem(swipe.currentIndex + 1, newPage.createObject(swipe, {"imageModel": pluses}))
                     swipe.currentIndex++
-                    console.log("Page " + swipe.currentIndex + " was added to swipe. (Counting from zero.)")
+                    console.log("Page number " + swipe.currentIndex + " was added to swipe. (Counting from zero.)")
                 }
             }
             Button {
@@ -108,12 +108,12 @@ Pane {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
-                    if(swipe.count > 1) {
+                    if(swipe.count < 1 || swipe.currentIndex === 0) {
+                        deleteButton.enabled = false
+                        console.log("There have to be at least 1 page in swipe./First page cannot be deleted.")
+                    } else {
                         console.log("Page " + swipe.currentIndex + " was removed from swipe. (Counting from zero.)")
                         swipe.removeItem(swipe.currentIndex)
-                    } else {
-                        deleteButton.enabled = false
-                        console.log("There have to be at least 1 page in swipe.")
                     }
                 }
             }
