@@ -12,13 +12,14 @@ Controls.SplitView {
     property alias resetButton: resetButton
     property alias resetZoomButton: resetZoomButton
     property alias comboBox: comboBox
-    property alias exportButton: exportButton
     property alias electrodeRep: electrodeRep
     property alias electrodePlacement: electrodePlacement
     property alias statisticsButton: statisticsButton
     property alias scrollIndicator: scrollIndicator
     property alias column: column
     property alias imageArea: imageArea
+    property alias gradientMouse: gradientMouse
+    property alias colorGradientPopup: colorGradientPopup
 
     property var name
     property int zHighest: 2
@@ -113,18 +114,9 @@ Controls.SplitView {
                     displayText: "Display: " + currentText
                 }
 
-                Row {
-                    id: statisticsRow
-                    height: resetButton.height
-                    spacing: 5
-                    Button {
-                        id: statisticsButton
-                        text: qsTr("Show spikes statistics")
-                    }
-                    Button {
-                        id: exportButton
-                        text: qsTr("Export image")
-                    }
+                Button {
+                    id: statisticsButton
+                    text: qsTr("Show spikes statistics")
                 }
 
                 Row {
@@ -198,7 +190,13 @@ Controls.SplitView {
                             GradientStop { position: 0.8; color: "orange"}
                             GradientStop { position: 1.0; color: "red" }
                         }
+                        MouseArea  {
+                            id: gradientMouse
+                            anchors.fill: parent
+                        }
+
                     }
+
                     Label {
                         x: 223
                         text: qsTr("max")
@@ -306,7 +304,145 @@ Controls.SplitView {
                     }
                 }
             }
+
+            Popup {
+                id: colorGradientPopup
+                x: (window.width - width) / 2 - imageArea.width
+                y: (window.height - height) / 6
+                focus: true
+                modal: true
+
+                Column {
+                    spacing: 10
+                    Label {
+                        text: qsTr("<b>Change colors</b>")
+                    }
+                    Item{
+                        //  id: percentageGradLabels
+                        height: 12
+                        width: 230
+                        Label {
+                            x:18
+                            text: "0"
+                        }
+                        Label {
+                            x: 35
+                            text: "0.1"
+                        }
+                        Label {
+                            x:75
+                            text: "0.3"
+                        }
+                        Label {
+                            x: 115
+                            text: "0.5"
+                        }
+                        Label {
+                            x: 155
+                            text: "0.7"
+                        }
+                        Label {
+                            x: 195
+                            text: "0.9"
+                        }
+                        Label {
+                            x:218
+                            text: "1"
+                        }
+                    }
+
+                    Item {
+                        //  id: gradient
+                        height: 20
+                        width: 300
+                        Label {
+                            x: 0
+                            text: qsTr("min")
+                        }
+                        Rectangle {
+                            width: 20
+                            height: 240
+                            x: 137
+                            y: -110
+                            clip: true
+                            rotation: -90
+                            gradient: Gradient {
+                                GradientStop { position: 0.0; color: "indigo" }
+                                GradientStop { position: 0.2; color: "blue"}
+                                GradientStop { position: 0.4; color: "green"}
+                                GradientStop { position: 0.6; color: "yellow"}
+                                GradientStop { position: 0.8; color: "orange"}
+                                GradientStop { position: 1.0; color: "red" }
+                            }
+                        }
+
+                        Label {
+                            x: 273
+                            text: qsTr("max")
+                        }
+                    }
+
+                    Item{
+                        // id: gradientLabels
+                        height: 20
+                        width: 200
+                        Label {
+                            x:18
+                            text: minSpikes
+                        }
+                        Label {
+                            x: 35
+                            text: Math.round(0.1*(maxSpikes - minSpikes))
+                        }
+                        Label {
+                            x:75
+                            text: Math.round(0.3*(maxSpikes - minSpikes))
+                        }
+                        Label {
+                            x: 115
+                            text: Math.round(0.5*(maxSpikes - minSpikes))
+                        }
+                        Label {
+                            x: 155
+                            text: Math.round(0.7*(maxSpikes - minSpikes))
+                        }
+                        Label {
+                            x: 195
+                            text: Math.round(0.9*(maxSpikes - minSpikes))
+                        }
+                        Label {
+                            x:218
+                            text: maxSpikes
+                        }
+                    }
+
+                    Row {
+                        spacing: 10
+                        SpinBox {
+                            from: 0
+                            to: 9
+                        }
+                        ComboBox {
+                            model: ["yellow", "red", "orange"]
+                            currentIndex: 0
+                            displayText: "Display: " + currentText
+                        }
+                    }
+                    Row {
+                        spacing: 100
+                        Button {
+                            text: qsTr("OK")
+                        }
+                        Button {
+                            text: qsTr("Cancel")
+                            onClicked: { colorGradientPopup.close() }
+                        }
+                    }
+                }
+
+            }
         }
+
         ScrollIndicator.vertical: ScrollIndicator { id: scrollIndicator }
     }
     onCurrIndexChanged: {

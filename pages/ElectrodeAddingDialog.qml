@@ -5,10 +5,12 @@ ElectrodeAddingDialogForm {
     okButton.onClicked: {
         addElectrode(columnSpinBox.value, rowSpinBox.value)
         addDialog.close()
+        setDefaultValues()
     }
 
     cancelButton.onClicked: {
         addDialog.close()
+        setDefaultValues()
     }
 
     function addElectrode(columnCount, rowCount) {
@@ -28,5 +30,10 @@ ElectrodeAddingDialogForm {
             tabBar.currentIndex = 1
         }
         console.log("New electrode " + rowCount + "x" + columnCount + " was added.")
+    }
+
+    function setDefaultValues() {
+        columnSpinBox.value = 5
+        rowSpinBox.value = 1
     }
 }

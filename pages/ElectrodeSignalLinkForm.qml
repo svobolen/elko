@@ -9,95 +9,80 @@ Controls.SplitView {
     property int maxSpikes: 0
     property int minSpikes: 0
 
-    property alias confirmButton: confirmButton
     property alias elecRep: elecRep
     property alias dragRep: dragRep
     property alias xmlModels: xmlModels
 
     Flickable {
-        contentHeight: destItem.height
-        contentWidth: destItem.width
-        width: 4/5 * parent.width
-        Layout.minimumWidth: 1/2 * parent.width + confirmButton.width / 2
-        boundsBehavior: Flickable.OvershootBounds
-
-        Item {
-            id: destItem
-            width: destination.width + 150
-            height: destination.height + 300
-
-            Column {
-                id: destination
-                spacing: 10
-                padding: 10
-
-                Repeater {
-                    id: elecRep
-                    model: electrodes
-                    Row {
-                        property alias bElectrode: bElectrode
-                        spacing: 10
-                        Label {
-                            text: rows + "x" + columns
-                            font.pixelSize: 12
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        BasicElectrode {
-                            id: bElectrode
-                            size: 40
-                            columnCount: columns
-                            rowCount: rows
-                            droppingEnabled: true
-                        }
-                    }
-                }
-            }
-            Button {
-                id: confirmButton
-                text: qsTr("Confirm")
-                x: (window.width - width)/2
-                anchors.top: destination.bottom
-                anchors.margins: 20
-            }
-        }
-        ScrollIndicator.vertical: ScrollIndicator { }
-        ScrollIndicator.horizontal: ScrollIndicator { }
-    }
-    Flickable {
-        contentHeight: sourceItem.height
-        contentWidth: sourceItem.width
-        Layout.minimumWidth: 50
-        Layout.maximumWidth: 1/2 * parent.width - confirmButton.width / 2
+        contentHeight:source.height + 150
+        contentWidth: source.width
+        Layout.minimumWidth: 1.5 * source.width
+        Layout.maximumWidth: 1/6 * parent.width
         boundsBehavior: Flickable.OvershootBounds
 
         Rectangle {
             color: "white"
             width: parent.parent.width
-            height: sourceItem.height
+            height: source.height + 150
 
-            Item {
-                id: sourceItem
-                width: source.width
-                height: source.height + 150
-                Column {
-                    id: source
-                    width: 50
-                    Layout.minimumWidth: 50
-                    spacing: 10
-                    padding: 10
-                    Repeater {
-                        id: dragRep
-                        model: xmlModels.trackModel
-                        DragTrack {
-                            size: 40
-                            trackName: label.replace(/\s+/g, '') //without whitespaces
-                            trackId: index
-                        }
+            Column {
+                id: source
+                width: 50
+                Layout.minimumWidth: 50
+                spacing: 10
+                padding: 10
+                Repeater {
+                    id: dragRep
+                    model: xmlModels.trackModel
+                    DragTrack {
+                        size: 40
+                        trackName: label.replace(/\s+/g, '') //without whitespaces
+                        trackId: index
                     }
                 }
             }
+
             XmlModels {id: xmlModels }
         }
         ScrollIndicator.vertical: ScrollIndicator { }
+    }
+
+    Flickable {
+        contentHeight: destination.height + 300
+        contentWidth: destination.width + 150
+        width: 4/5 * parent.width
+        Layout.minimumWidth: 2/3 * parent.width
+        boundsBehavior: Flickable.OvershootBounds
+
+        Column {
+            id: destination
+            spacing: 10
+            padding: 10
+
+            Repeater {
+                id: elecRep
+                model: electrodes
+                Row {
+                    property alias bElectrode: bElectrode
+                    spacing: 10
+                    Label {
+                        text: rows + "x" + columns
+                        font.pixelSize: 12
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    BasicElectrode {
+                        id: bElectrode
+                        size: 40
+                        columnCount: columns
+                        rowCount: rows
+                        droppingEnabled: true
+                    }
+                }
+            }
+        }
+
+
+        ScrollIndicator.vertical: ScrollIndicator { }
+        ScrollIndicator.horizontal: ScrollIndicator { }
     }
 }

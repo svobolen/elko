@@ -3,13 +3,13 @@ import QtQuick.Controls 2.0
 
 ElectrodeManagerForm {
 
-    confirmButton.onClicked: {
+    function confirm() {
         var chosenElecs = getChosenElectrodes()
         if (chosenElecs.count === 0) {
             infoPopup.open()
             console.log("User did not choose any electrode.")
         } else {
-            listView.currentIndex = 2   //index v listview
+            listView.currentIndex = 2
             titleLabel.text = "Link Signal with Electrode"
             stackView.push( "qrc:/pages/ElectrodeSignalLink.qml", {"electrodes": chosenElecs, "name": "Link Signal with Electrode"} )
         }
@@ -51,6 +51,7 @@ ElectrodeManagerForm {
                 console.log(gridRepeater.itemAt(j).count + "x grid " + gridRepeater.itemAt(j).gridRows + "x" + gridRepeater.itemAt(j).gridColumns)
             }
         }
+
         return chosenElectrodesList
     }
 }

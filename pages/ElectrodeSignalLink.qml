@@ -5,11 +5,11 @@ ElectrodeSignalLinkForm {
 
     ListModel { id: linkedElectrodesList } //ListElement { rows: rowCount, columns: columnCount, links: links}
 
-    confirmButton.onClicked: {
+    function confirm() {
         readXml()
         fillLinkedElectrodesList()
-        listView.currentIndex = 3   //index v listview
         titleLabel.text = "Electrode Placement"
+        listView.currentIndex = 3
         stackView.push( "qrc:/pages/ElectrodePlacement.qml", {"electrodes": linkedElectrodesList, "images": window.images,"name": "Electrode Placement",
                            "minSpikes": minSpikes, "maxSpikes": maxSpikes} )
     }
@@ -36,7 +36,6 @@ ElectrodeSignalLinkForm {
                     spikes++
                 }
             }
-            console.log("spikes " + spikes + " min " + min + " max " + max)
             if (spikes > max){
                 max = spikes
             } else if (spikes <= min) {
@@ -44,7 +43,7 @@ ElectrodeSignalLinkForm {
             }
 
             dragRep.itemAt(i).spikes = spikes
-            console.log(xmlModels.trackModel.get(i).label.replace(/\s+/g, '') + " (" + i + ") has " + spikes + " spike(s).")
+//            console.log(xmlModels.trackModel.get(i).label.replace(/\s+/g, '') + " (" + i + ") has " + spikes + " spike(s).")
         }
         console.log("Minimum is " + min + " spike(s).")
         console.log("Maximum is " + max + " spikes.")

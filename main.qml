@@ -12,13 +12,14 @@ ApplicationWindow {
     visible: true
     title: "Elko"
     property var images
+    property alias confirmButton: confirmButton
 
     header: ToolBar {
 
         background: Rectangle {
             implicitHeight: 40
             color: "skyblue"
-            opacity: 0.3
+            opacity: 1
         }
 
         RowLayout {
@@ -80,6 +81,29 @@ ApplicationWindow {
         }
     }
 
+    footer: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                id: backButton
+                text: qsTr("< Back")
+                anchors.left: parent.left
+                onClicked: {
+                    if(stackView.depth > 2) {
+                        stackView.pop()
+                        titleLabel.text = stackView.currentItem.name
+                    }
+                }
+            }
+            ToolButton {
+                id: confirmButton
+                text: qsTr("Next >")
+                anchors.right: parent.right
+                onClicked: stackView.currentItem.confirm()
+            }
+        }
+    }
+
     Drawer {
         id: drawer
         width: Math.min(window.width, window.height) / 3 * 1.5
@@ -99,7 +123,6 @@ ApplicationWindow {
             currentIndex: -1
             anchors.fill: parent
 
-
             delegate: ItemDelegate {
                 id: control
                 width: parent.width
@@ -109,7 +132,6 @@ ApplicationWindow {
                 background: Rectangle {
                     implicitWidth: 100
                     implicitHeight: 40
-                    opacity: control.down ? 0.3 : 1
                     color: control.down ? "skyblue" : "white"
                 }
 
@@ -130,8 +152,6 @@ ApplicationWindow {
                 ListElement { title: "Alenka"; source: "qrc:/pages/Alenka.qml" }
             }
         }
-
-
     }
 
     StackView {     //inicializace stacku, uvodni stranka
@@ -147,6 +167,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.centerIn: parent;
             }
+
             PinchArea {
                 anchors.fill: parent
                 pinch.target: pane
@@ -160,11 +181,20 @@ ApplicationWindow {
                     pane.y = 0
                 }
             }
+
+            function confirm() {
+                changePage("Image Manager", "qrc:/pages/ImageManager.qml", 0)
+            }
         }
+
         replaceEnter: Transition {
             XAnimator {
                 duration: 0
             }
+        }
+
+        onDepthChanged: {
+            backButton.enabled = (depth > 2)
         }
     }
 
@@ -243,7 +273,7 @@ ApplicationWindow {
             for (var l = 0; l < openSessionPage.electrodesModel.count; l++) {
                 electrodeList.append({rows: openSessionPage.electrodesModel.get(l).rows,
                                          columns: openSessionPage.electrodesModel.get(l).columns,
-                                            links: null})
+                                         links: null})
             }
 
             stackView.push( "qrc:/pages/ElectrodePlacement.qml", {"electrodes": electrodeList, "images": sourceArray,
@@ -251,11 +281,10 @@ ApplicationWindow {
         }
         onRejected: console.log("Choosing file canceled.")
     }
+
     Pages.OpenSession {
         id: openSessionPage
     }
-
-
 
     function changePage(title, source, indexNum) {
         if (listView.currentIndex !== indexNum) {
@@ -272,6 +301,4 @@ ApplicationWindow {
             }
         }
     }
-
-
 }

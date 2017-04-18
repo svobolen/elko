@@ -4,8 +4,8 @@ import QtQuick.Dialogs 1.2
 
 ElectrodePlacementForm {
 
-    exportButton.onClicked: {
-        loader.sourceComponent = fileComp
+    function confirm() {
+        loader.sourceComponent = fileComp;
     }
 
     resetButton.onClicked: {
@@ -55,6 +55,10 @@ ElectrodePlacementForm {
                 }
             }
         }
+    }
+
+    gradientMouse.onPressAndHold: {
+        colorGradientPopup.open()
     }
 
     comboBox.onCurrentIndexChanged: {
@@ -131,4 +135,9 @@ ElectrodePlacementForm {
     Loader {
         id: loader
     }
+
+//    Component.onCompleted: {
+    // musi se to prejmenovat potom vsude zpet
+//        window.confirmButton.text = "Save image"
+//    }
 }

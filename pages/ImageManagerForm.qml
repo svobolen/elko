@@ -3,14 +3,13 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 import QtQuick.Dialogs 1.2
 
-Pane {
+Page {
     id: imageManager
     property var name
     property var images
 
     property alias swipe: swipe
-    property alias resetButton: resetButton
-    property alias confirmButton: confirmButton
+//    property alias confirmButton: confirmButton
 
     ListModel {
         id: brains
@@ -19,6 +18,7 @@ Pane {
         ListElement { sourcePath: "qrc:/images/brains/brain4.png"}
         ListElement { sourcePath: "qrc:/images/brains/brain2.jpg"}
     }
+
     ListModel {
         id: pluses
         ListElement { sourcePath: "qrc:/images/plus.png"}
@@ -36,6 +36,7 @@ Pane {
             swipe.addItem(newPage.createObject(swipe, {"imageModel": brains}))
         }
     }
+
     Component {
         id: newPage
 
@@ -95,7 +96,7 @@ Pane {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
-                    swipe.insertItem(swipe.currentIndex + 1, newPage.createObject(swipe, {"imageModel": pluses}))
+                    swipe.addItem(newPage.createObject(swipe, {"imageModel": pluses}) )
                     swipe.currentIndex++
                     console.log("Page number " + swipe.currentIndex + " was added to swipe. (Counting from zero.)")
                 }
@@ -120,21 +121,6 @@ Pane {
         }
     }
 
-    Button {
-        id: confirmButton
-        text: qsTr("OK")
-        x: parent.width / 2 - (width + anchors.margins + resetButton.width) / 2
-        anchors {margins: 10; bottomMargin: 50 }
-        anchors {bottom: indicator.top; right: resetButton.left}
-
-    }
-    Button {
-        id: resetButton
-        text: qsTr("Reset")
-        anchors {margins: 10; bottomMargin: 50 }
-        anchors {bottom: indicator.top; left: confirmButton.right}
-
-    }
     PageIndicator {
         id: indicator
         count: swipe.count
