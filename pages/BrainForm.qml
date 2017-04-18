@@ -4,7 +4,8 @@ import QtQuick.Controls 2.0
 Image {
     id: brainImage
 
-    property string sourceImg
+    property int orderNum: 0
+    property string sourceImg: ""
     property bool checkboxVisible: false
     readonly property string plusImgSource: "qrc:/images/plus.png"
 

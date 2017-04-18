@@ -59,6 +59,14 @@ BrainForm {
                     info.open()
                 }
                 loader.sourceComponent = undefined
+                // na jaky je strance a kolikaty je v poradi (if 3 -> nova stranka)
+                if (orderNum < 3) {
+                    imageManager.swipe.itemAt(imageManager.swipe.currentIndex).images.itemAt(++orderNum).visible = true
+                } else {
+                    imageManager.swipe.addItem(newPage.createObject(imageManager.swipe, {"imageModel": imageManager.pluses}))
+                    imageManager.swipe.currentIndex++
+                    console.log("Page number " + swipe.currentIndex + " was added to swipe. (Counting from zero.)")
+                }
             }
             onRejected: {
                 loader.sourceComponent = undefined

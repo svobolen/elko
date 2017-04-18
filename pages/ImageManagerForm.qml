@@ -7,25 +7,23 @@ Page {
     id: imageManager
     property var name
     property var images
-
-    property alias swipe: swipe
-//    property alias confirmButton: confirmButton
-
-    ListModel {
-        id: brains
+    property ListModel brains: ListModel {
         ListElement { sourcePath: "qrc:/images/brains/brain1.png"}
         ListElement { sourcePath: "qrc:/images/brains/brain3.png"}
         ListElement { sourcePath: "qrc:/images/brains/brain4.png"}
         ListElement { sourcePath: "qrc:/images/brains/brain2.jpg"}
     }
-
-    ListModel {
-        id: pluses
+    property ListModel pluses: ListModel {
         ListElement { sourcePath: "qrc:/images/plus.png"}
         ListElement { sourcePath: "qrc:/images/plus.png"}
         ListElement { sourcePath: "qrc:/images/plus.png"}
         ListElement { sourcePath: "qrc:/images/plus.png"}
     }
+
+
+    property alias swipe: swipe
+    property alias imageManager: imageManager
+
 
     SwipeView {
         id: swipe
@@ -34,6 +32,7 @@ Page {
 
         Component.onCompleted: {
             swipe.addItem(newPage.createObject(swipe, {"imageModel": brains}))
+            swipe.addItem(newPage.createObject(swipe, {"imageModel": pluses}))
         }
     }
 
@@ -61,6 +60,7 @@ Page {
                     secondPage.y = 0
                 }
             }
+
             Label {
                 id: label
                 text: qsTr("Choose one or more images. You can upload your own photos or pictures.")
@@ -71,6 +71,7 @@ Page {
                 horizontalAlignment: Qt.AlignHCenter
                 wrapMode: Label.Wrap
             }
+
             Grid {
                 id: imageGrid
                 columns: 2
@@ -83,41 +84,31 @@ Page {
                     id: rep
                     model: imageModel
                     Brain {
+                        orderNum: index
                         sourceImg: model.sourcePath
                         checkboxVisible: (model.sourcePath === "qrc:/images/plus.png") ? false : true
+                        visible: (model.sourcePath === "qrc:/images/plus.png" & index > 0) ? false : true
                     }
                 }
             }
-            Button {
-                id: addButton
-                text: "+"
-                font.pixelSize: 21
-                width: height
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: {
-                    swipe.addItem(newPage.createObject(swipe, {"imageModel": pluses}) )
-                    swipe.currentIndex++
-                    console.log("Page number " + swipe.currentIndex + " was added to swipe. (Counting from zero.)")
-                }
-            }
-            Button {
-                id: deleteButton
-                text: "-"
-                font.pixelSize: 21
-                width: height
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: {
-                    if(swipe.count < 1 || swipe.currentIndex === 0) {
-                        deleteButton.enabled = false
-                        console.log("There have to be at least 1 page in swipe./First page cannot be deleted.")
-                    } else {
-                        console.log("Page " + swipe.currentIndex + " was removed from swipe. (Counting from zero.)")
-                        swipe.removeItem(swipe.currentIndex)
-                    }
-                }
-            }
+
+//            Button {
+//                id: deleteButton
+//                text: "-"
+//                font.pixelSize: 21
+//                width: height
+//                anchors.left: parent.left
+//                anchors.verticalCenter: parent.verticalCenter
+//                onClicked: {
+//                    if(swipe.count < 1 || swipe.currentIndex === 0) {
+//                        deleteButton.enabled = false
+//                        console.log("There have to be at least 1 page in swipe./First page cannot be deleted.")
+//                    } else {
+//                        console.log("Page " + swipe.currentIndex + " was removed from swipe. (Counting from zero.)")
+//                        swipe.removeItem(swipe.currentIndex)
+//                    }
+//                }
+//            }
         }
     }
 
