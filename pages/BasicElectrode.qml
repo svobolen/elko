@@ -5,7 +5,7 @@ Item {
     id: root
     property int columnCount
     property int rowCount
-    property int size: 20
+    property int size: 40
     property bool droppingEnabled: false
     property string color: "white"
     property ListModel linkedTracks: ListModel { }  //ListElement {electrodeNumber: defaultName, wave: name, spikes: 0})
@@ -74,6 +74,7 @@ Item {
                                 Text {
                                     id: electrodeText
                                     text: dropArea.defaultName
+                                    font.pixelSize: root.size/2
                                     anchors.fill: parent
                                     horizontalAlignment:Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter

@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
+import "../controls" as MyControls
 
 Page {
     id: item
@@ -19,14 +20,15 @@ Page {
     header: TabBar {
         id: bar
         width: parent.width
-        TabButton { text: qsTr("Strips") }
-        TabButton { text: qsTr("Grids") }
+        MyControls.TabButton { text: qsTr("Strips") }
+        MyControls.TabButton { text: qsTr("Grids") }
     }
 
     StackLayout {
         id: stack
         width: parent.width
         height: parent.height
+        y: header.height
         currentIndex: bar.currentIndex
         Flickable {
             contentHeight: stripColumn.height + 150
@@ -35,8 +37,8 @@ Page {
 
             Column {
                 id: stripColumn
-                spacing: 10
-                padding: 10
+                spacing: 30
+                padding: 20
 
                 ListModel {
                     id: stripModel
@@ -53,7 +55,7 @@ Page {
                     id: stripRep
                     model: stripModel
                     delegate: Row {
-                        spacing: 10
+                        spacing: 20
                         property alias count: stripSpin.value
                         property alias stripColumns: strip.columnCount
                         SpinBox {
@@ -64,7 +66,7 @@ Page {
                         }
                         Label {
                             text: strip.rowCount + "x" + strip.columnCount
-                            font.pixelSize: 12
+                            font.pixelSize: 20
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         BasicElectrode {
@@ -88,8 +90,8 @@ Page {
 
             Column {
                 id: gridColumn
-                spacing: 10
-                padding: 10
+                spacing: 30
+                padding: 20
 
                 ListModel {
                     id: gridModel
@@ -106,7 +108,7 @@ Page {
                     id: gridRep
                     model: gridModel
                     delegate: Row {
-                        spacing: 10
+                        spacing: 20
                         property alias count: gridSpin.value
                         property alias gridRows: grid.rowCount
                         property alias gridColumns: grid.columnCount
@@ -118,7 +120,7 @@ Page {
                         }
                         Label {
                             text: grid.rowCount + "x" + grid.columnCount
-                            font.pixelSize: 12
+                            font.pixelSize: 20
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         BasicElectrode {
@@ -138,9 +140,10 @@ Page {
 
     Button {
         id: addButton
-        text: qsTr("Add new type of strip or grid")
-        anchors.bottom: parent.bottom
-        anchors.right: resetButton.left
+        text: qsTr("Add new electrode")
+        font.pixelSize: 30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
         anchors.margins: 15
     }
 

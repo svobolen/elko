@@ -6,7 +6,7 @@ Item {
     id: root
     property int columnCount
     property int rowCount
-    property int size: 20
+    property int size: 40
     property alias color: electrode.color
     property int indexNumber: 1
     property bool draggable: true

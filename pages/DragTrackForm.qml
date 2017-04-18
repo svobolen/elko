@@ -2,7 +2,7 @@ import QtQuick 2.7
 
 Item {
     id: root
-    property int size: 20
+    property int size: 80
     property string trackName: "X"
     property int trackId: -1
     property int spikes: 0
@@ -32,6 +32,7 @@ Item {
 
             Text {
                 text: trackName
+                font.pixelSize: root.size / 2
                 anchors.fill: parent
                 horizontalAlignment:Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

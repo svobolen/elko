@@ -17,25 +17,23 @@ Controls.SplitView {
         contentHeight:source.height + 150
         contentWidth: source.width
         Layout.minimumWidth: 1.5 * source.width
-        Layout.maximumWidth: 1/6 * parent.width
+        Layout.maximumWidth: 1.5 * source.width
         boundsBehavior: Flickable.OvershootBounds
 
-        Rectangle {
-            color: "white"
-            width: parent.parent.width
-            height: source.height + 150
+//        Rectangle {
+//            color: "white"
+//            width: parent.parent.width
+//            height: source.height + 150
 
             Column {
                 id: source
-                width: 50
-                Layout.minimumWidth: 50
-                spacing: 10
-                padding: 10
+                width: 100
+                spacing: 30
+                padding: 30
                 Repeater {
                     id: dragRep
                     model: xmlModels.trackModel
                     DragTrack {
-                        size: 40
                         trackName: label.replace(/\s+/g, '') //without whitespaces
                         trackId: index
                     }
@@ -43,7 +41,7 @@ Controls.SplitView {
             }
 
             XmlModels {id: xmlModels }
-        }
+//        }
         ScrollIndicator.vertical: ScrollIndicator { }
     }
 
@@ -56,23 +54,23 @@ Controls.SplitView {
 
         Column {
             id: destination
-            spacing: 10
-            padding: 10
+            spacing: 30
+            padding: 30
 
             Repeater {
                 id: elecRep
                 model: electrodes
                 Row {
                     property alias bElectrode: bElectrode
-                    spacing: 10
+                    spacing: 20
                     Label {
                         text: rows + "x" + columns
-                        font.pixelSize: 12
+                        font.pixelSize: 40
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     BasicElectrode {
                         id: bElectrode
-                        size: 40
+                        size: 80
                         columnCount: columns
                         rowCount: rows
                         droppingEnabled: true

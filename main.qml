@@ -2,36 +2,50 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 import QtQuick.Dialogs 1.2
+//import QtQuick.Controls.Universal 2.0
 import "./pages" as Pages
+import "./controls" as MyControls
 
 
 ApplicationWindow {
     id: window
-    width: 1020
-    height: 660
-    visible: true
+    //    width: 1020
+    //    height: 660
+
+    visible: false //true for tablet
     title: "Elko"
+
+    //    Universal.theme: Universal.Olive
+
     property var images
     property alias confirmButton: confirmButton
 
     header: ToolBar {
+        height: 100
 
         background: Rectangle {
-            implicitHeight: 40
             color: "skyblue"
             opacity: 1
         }
 
         RowLayout {
-            spacing: 20
             anchors.fill: parent
 
             ToolButton {
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/images/drawer.png"
+                implicitHeight: parent.height
+                implicitWidth: 100
+
+                contentItem: Rectangle {
+                    anchors.fill: parent
+                    color: "transparent"
+                    Image {
+                        anchors.fill: parent
+                        anchors.margins: 25
+                        fillMode: Image.PreserveAspectFit
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/images/drawer@4x.png"
+                    }
                 }
                 onClicked: drawer.open()
             }
@@ -39,7 +53,7 @@ ApplicationWindow {
             Label {
                 id: titleLabel
                 text: "Elko"
-                font.pixelSize: 20
+                font.pixelSize: 30
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
@@ -47,32 +61,42 @@ ApplicationWindow {
             }
 
             ToolButton {
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/images/menu.png"
+                implicitHeight: parent.height
+                implicitWidth: 100
+
+                contentItem: Rectangle {
+                    anchors.fill: parent
+                    color: "transparent"
+                    Image {
+                        anchors.fill: parent
+                        anchors.margins: 25
+                        fillMode: Image.PreserveAspectFit
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/images/menu@4x.png"
+                    }
                 }
                 onClicked: optionsMenu.open()
 
-                Menu {
+                MyControls.Menu {
                     id: optionsMenu
                     x: parent.width - width
+                    font.pixelSize: 30
                     transformOrigin: Menu.TopRight
 
-                    MenuItem {
+                    MyControls.MenuItem {
                         text: qsTr("Save session...")
                         onTriggered: saveDialog.open()
                     }
-                    MenuItem {
+                    MyControls.MenuItem {
                         text: qsTr("Open session...")
                         onTriggered: openDialog.open()
                     }
-                    MenuItem {
+                    MyControls.MenuItem {
                         text: qsTr("About")
                         onTriggered: aboutDialog.open()
                     }
-                    MenuItem {
+                    MyControls.MenuItem {
                         text: qsTr("Exit")
                         onTriggered: Qt.quit()
                     }
@@ -82,11 +106,28 @@ ApplicationWindow {
     }
 
     footer: ToolBar {
+        height: 80
+        background: Rectangle {
+            implicitHeight: 100
+            color: "white"
+
+            Rectangle {
+                width: parent.width
+                height: 2
+                anchors.bottom: parent.bottom
+                color: "transparent"
+                border.color: "skyblue"
+            }
+        }
+
         RowLayout {
             anchors.fill: parent
             ToolButton {
                 id: backButton
                 text: qsTr("< Back")
+                font.pixelSize: 40
+                implicitWidth: 200
+                implicitHeight: parent.height
                 anchors.left: parent.left
                 onClicked: {
                     if(stackView.depth > 2) {
@@ -98,6 +139,9 @@ ApplicationWindow {
             ToolButton {
                 id: confirmButton
                 text: qsTr("Next >")
+                font.pixelSize: 40
+                implicitWidth: 200
+                implicitHeight: parent.height
                 anchors.right: parent.right
                 onClicked: stackView.currentItem.confirm()
             }
@@ -127,11 +171,12 @@ ApplicationWindow {
                 id: control
                 width: parent.width
                 text: model.title
+                font.pixelSize: 40
                 highlighted: ListView.isCurrentItem
 
                 background: Rectangle {
                     implicitWidth: 100
-                    implicitHeight: 40
+                    implicitHeight: 100
                     color: control.down ? "skyblue" : "white"
                 }
 
@@ -301,4 +346,6 @@ ApplicationWindow {
             }
         }
     }
+
+    Component.onCompleted: showFullScreen()
 }

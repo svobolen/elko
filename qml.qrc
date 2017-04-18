@@ -38,5 +38,8 @@
         <file>pages/Alenka.qml</file>
         <file>xmls/session.xml</file>
         <file>pages/OpenSession.qml</file>
+        <file>controls/TabButton.qml</file>
+        <file>controls/MenuItem.qml</file>
+        <file>controls/Menu.qml</file>
     </qresource>
 </RCC>
