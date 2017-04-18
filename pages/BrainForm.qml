@@ -5,20 +5,17 @@ Image {
     id: brainImage
 
     property int orderNum: 0
-    property string sourceImg: ""
-    property bool checkboxVisible: false
     readonly property string plusImgSource: "qrc:/images/plus.png"
 
     property alias info: info
     property alias mouseArea: mouseArea
     property alias checkbox: checkbox
-    property alias imgChecked: checkbox.checked
     property alias menu: menu
     property alias changeMenu: changeMenu
     property alias deleteMenu: deleteMenu
     property alias brainImage: brainImage
 
-    source: sourceImg
+    source: ""
     fillMode: Image.PreserveAspectFit
     width: parent.width/2
     height: parent.height/2
@@ -42,7 +39,8 @@ Image {
 
     CheckBox {
         id: checkbox
-        visible: checkboxVisible
+        visible: !(brainImage.source == plusImgSource)
+        checked: false
         anchors.fill: parent
         indicator: Rectangle {
             implicitWidth: 26

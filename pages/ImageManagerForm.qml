@@ -85,30 +85,11 @@ Page {
                     model: imageModel
                     Brain {
                         orderNum: index
-                        sourceImg: model.sourcePath
-                        checkboxVisible: (model.sourcePath === "qrc:/images/plus.png") ? false : true
+                        source: model.sourcePath
                         visible: (model.sourcePath === "qrc:/images/plus.png" & index > 0) ? false : true
                     }
                 }
             }
-
-//            Button {
-//                id: deleteButton
-//                text: "-"
-//                font.pixelSize: 21
-//                width: height
-//                anchors.left: parent.left
-//                anchors.verticalCenter: parent.verticalCenter
-//                onClicked: {
-//                    if(swipe.count < 1 || swipe.currentIndex === 0) {
-//                        deleteButton.enabled = false
-//                        console.log("There have to be at least 1 page in swipe./First page cannot be deleted.")
-//                    } else {
-//                        console.log("Page " + swipe.currentIndex + " was removed from swipe. (Counting from zero.)")
-//                        swipe.removeItem(swipe.currentIndex)
-//                    }
-//                }
-//            }
         }
     }
 
